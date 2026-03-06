@@ -8,7 +8,9 @@
     "watch:css": "postcss src/public/css/input.css -o dist/public/css/style.css --watch",
     "watch:server": "tsc -w",
     "dev:run": "nodemon dist/server.js",
-    "dev": "npm run build:css && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run dev:run\""
+    "build:frontend": "esbuild src/public/ts/form-handler.ts --bundle --minify --outfile=dist/public/js/form-handler.js",
+    "watch:frontend": "esbuild src/public/ts/form-handler.ts --bundle --outfile=dist/public/js/form-handler.js --watch",
+    "dev": "concurrently -k \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
@@ -18,6 +20,7 @@
     "autoprefixer": "^10.4.27",
     "browser-sync": "^3.0.4",
     "concurrently": "^9.2.1",
+    "esbuild": "^0.27.3",
     "nodemon": "^3.1.14",
     "postcss": "^8.5.8",
     "postcss-cli": "^11.0.1",
