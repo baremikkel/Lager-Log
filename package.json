@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "ejs": "^5.0.1",
+    "express": "^5.2.1"
+  },
+  "scripts": {
+    "build:css": "postcss src/public/css/input.css -o dist/public/css/style.css",
+    "watch:css": "postcss src/public/css/input.css -o dist/public/css/style.css --watch",
+    "watch:server": "tsc -w",
+    "dev:run": "nodemon dist/server.js",
+    "dev": "npm run build:css && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run dev:run\""
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.5",
+    "autoprefixer": "^10.4.27",
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.8",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
