@@ -3,11 +3,11 @@ import { Router, Request, Response } from 'express';
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
-    res.redirect('/home')
+    res.redirect('/scanner')
 });
 
-router.get('/home', (req: Request, res: Response)=> {
-    res.render('front_page', {title: 'Home page'})
+router.get('/scanner', (req: Request, res: Response)=> {
+    res.render('scanner_page', {title: 'Scanner'})
 })
 
 router.get('/about', (req: Request, res: Response) => {
