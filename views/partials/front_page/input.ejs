@@ -1,19 +1,27 @@
-<div class="bg-white p-6 rounded-2xl shadow-sm w-full md:w-1/2">
-  <form class="flex items-center gap-2" id="barcodeForm">
+<div class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2" id="inputPlatform">
+  <div class="flex items-center gap-2">
+  <form class="flex items-center gap-2 w-full" id="barcodeForm">
     <input
       id="barcodeInput"
       type="text"
       placeholder="Barcode"
-      class="text-[20px] rounded-lg border border-gray-300 p-2 outline-none w-full"
+      class="text-[20px] rounded-lg bg-white border border-gray-300 p-2 outline-none w-full"
     />
 
     <button
       type="submit"
-      class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px]"
+      class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px] whitespace-nowrap"
       id="barcodeButton"
     >
-      Submit
+      Send liste
     </button>
   </form>
+
+  <button class="bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap add-mode" id="modeButton">
+    Tilføj Mode
+  </button>
 </div>
-<script src="/ts/front_page/input.js"></script>
+  
+</div>
+<script src="/js/input.js"></script>
+<script src="/js/switch.js"></script>

@@ -1,5 +1,5 @@
-window.addEventListener("keydown", function (event) {
-  const inputField = this.document.getElementById("barcodeInput");
+document.addEventListener("keydown", function (event) {
+  const inputField = document.getElementById("barcodeInput");
 
   const isTypingElsewhere =
     document.activeElement &&

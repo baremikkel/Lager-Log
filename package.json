@@ -1,25 +1,32 @@
 {
+  "name": "lager-log",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "ejs": "^5.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
   },
   "scripts": {
     "build:css": "postcss src/public/css/input.css -o dist/public/css/style.css",
     "watch:css": "postcss src/public/css/input.css -o dist/public/css/style.css --watch",
-    "watch:server": "tsc -w",
+    "watch:server": "esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js --watch",
     "dev:run": "nodemon dist/server.js",
-    "build:frontend": "esbuild src/public/ts/form-handler.ts --bundle --minify --outfile=dist/public/js/form-handler.js",
-    "watch:frontend": "esbuild src/public/ts/form-handler.ts --bundle --outfile=dist/public/js/form-handler.js --watch",
+    "build:frontend": "esbuild src/public/ts/**/*.ts --bundle --minify --outdir=dist/public/js",
+    "watch:frontend": "esbuild src/public/ts/**/*.ts --bundle --outdir=dist/public/js --watch",
     "dev": "concurrently -k \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
+    "@types/dotenv": "^6.1.1",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.5",
+    "@types/pg": "^8.18.0",
     "autoprefixer": "^10.4.27",
     "browser-sync": "^3.0.4",
     "concurrently": "^9.2.1",
+    "dotenv": "^17.3.1",
     "esbuild": "^0.27.3",
     "nodemon": "^3.1.14",
     "postcss": "^8.5.8",
