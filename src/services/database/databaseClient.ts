@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import * as fs from 'fs';
 import { Pool } from 'pg';
+import { Category, Product, QuantityUnit } from './tableInterfaces';
 
 dotenv.config();
 
@@ -33,6 +34,42 @@ async function setupDatabase() {
         client.release();
     }
 }
+
+async function getAllProducts(): Promise<Product[]> {
+    const {rows} = await pool.query('SELECT * FROM products')
+    return rows;
+}
+
+async function getAllCategories(): Promise<Category[]> {
+    const {rows} = await pool.query('SELECT * FROM categories')
+    return rows;
+}
+
+async function getAllUnits(): Promise<QuantityUnit[]> {
+    const {rows} = await pool.query('SELECT * FROM quantity_units')
+    return rows;
+}
+
+async function getProductByBarcode(product_barcode: string): Promise<Product> {
+    const {rows} = await pool.query('SELECT * FROM products WHERE barcode = ?', [product_barcode])
+    return rows[0];
+}
+
+async function getProductIdByBarcode(product_barcode: string): Promise<Product> {
+    const {rows} = await pool.query('SELECT id FROM products WHERE barcode = ?', [product_barcode])
+    return rows[0];
+}
+
+async function getUnitById(id: number): Promise<QuantityUnit> {
+    const {rows} = await pool.query('SELECT unit FROM quantity_units WHERE id = ?', [id])
+    return rows[0];
+}
+
+async function getUnitIdByName(unit: string): Promise<QuantityUnit> {
+    const {rows} = await pool.query('SELECT id FROM quantity_units WHERE unit = ?', [unit])
+    return rows[0];
+}
+
 
 export {setupDatabase};
 export default pool;
