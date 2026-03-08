@@ -1,11 +1,15 @@
+import { ItemLister } from "./_Item"
+
 class SubmitBarcode {
     private barcodeForm: HTMLFormElement
     private barcodeInput: HTMLInputElement
+    private productListTemplate: HTMLTemplateElement
     private products: any[]
 
-    constructor(barcodeForm: HTMLFormElement, barcodeInput: HTMLInputElement, products: any[]) {
+    constructor(barcodeForm: HTMLFormElement, barcodeInput: HTMLInputElement, productListTemplate: HTMLTemplateElement, products: any[]) {
         this.barcodeForm = barcodeForm
         this.barcodeInput = barcodeInput
+        this.productListTemplate = productListTemplate
         this.products = products
 
         this.barcodeForm.addEventListener('submit', (e: Event) => {
@@ -17,9 +21,7 @@ class SubmitBarcode {
         const barcodeValue = this.barcodeInput.value
         for (let i = 0; i < this.products.length; i++) {
             if (this.products[i].product_barcode === barcodeValue) {
-                /**
-                 * If the product is found add to the list in the next section
-                 */
+                new ItemLister(this.products[i], this.productListTemplate)
                 return
             }
         }

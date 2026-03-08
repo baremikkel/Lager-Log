@@ -15,7 +15,8 @@
     "dev:run": "nodemon dist/server.js",
     "build:frontend": "esbuild src/public/ts/**/*.ts --bundle --minify --outbase=src/public/ts --outdir=dist/public/js",
     "watch:frontend": "esbuild src/public/ts/**/*.ts --bundle --outbase=src/public/ts --outdir=dist/public/js --watch",
-    "dev": "concurrently -k \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
+    "copy:assets": "copyfiles -u 2 src/views/images/**/* dist/public",
+    "dev": "npm run copy:assets && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
@@ -28,6 +29,7 @@
     "autoprefixer": "^10.4.27",
     "browser-sync": "^3.0.4",
     "concurrently": "^9.2.1",
+    "copyfiles": "^2.4.1",
     "dotenv": "^17.3.1",
     "esbuild": "^0.27.3",
     "nodemon": "^3.1.14",

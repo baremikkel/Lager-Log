@@ -104,6 +104,7 @@ var PORT = 3e3;
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
 app.use(express.static(path.join(process.cwd(), "dist", "public")));
+app.use("/images", express.static(path.join(process.cwd(), "src", "public", "images")));
 app.use(express.json());
 app.use("/api", api_default);
 app.use("/", pages_default);
