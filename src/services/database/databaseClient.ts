@@ -45,31 +45,36 @@ async function getAllCategories(): Promise<Category[]> {
     return rows;
 }
 
-async function getAllUnits(): Promise<QuantityUnit[]> {
+async function getAllUnits(): Promise<QuantityUnit[]>  {
     const {rows} = await pool.query('SELECT * FROM quantity_units')
     return rows;
 }
 
-async function getProductByBarcode(product_barcode: string): Promise<Product> {
-    const {rows} = await pool.query('SELECT * FROM products WHERE barcode = ?', [product_barcode])
-    return rows[0];
+async function getProductByBarcode(product_barcode: string): Promise<Product | false> {
+    const { rows } = await pool.query('SELECT * FROM products WHERE product_barcode = $1', [product_barcode]);
+
+    if (rows.length === 0) {
+        return false;
+    }
+
+    return rows[0] as Product;
 }
 
 async function getProductIdByBarcode(product_barcode: string): Promise<Product> {
-    const {rows} = await pool.query('SELECT id FROM products WHERE barcode = ?', [product_barcode])
+    const {rows} = await pool.query('SELECT id FROM products WHERE barcode = $1', [product_barcode])
     return rows[0];
 }
 
 async function getUnitById(id: number): Promise<QuantityUnit> {
-    const {rows} = await pool.query('SELECT unit FROM quantity_units WHERE id = ?', [id])
+    const {rows} = await pool.query('SELECT unit FROM quantity_units WHERE id = $1', [id])
     return rows[0];
 }
 
 async function getUnitIdByName(unit: string): Promise<QuantityUnit> {
-    const {rows} = await pool.query('SELECT id FROM quantity_units WHERE unit = ?', [unit])
+    const {rows} = await pool.query('SELECT id FROM quantity_units WHERE unit = $1', [unit])
     return rows[0];
 }
 
 
-export {setupDatabase};
+export {setupDatabase, getAllProducts, getAllCategories, getAllUnits, getProductByBarcode, getProductIdByBarcode, getUnitById, getUnitIdByName};
 export default pool;
