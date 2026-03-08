@@ -1,28 +1,33 @@
-<div class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2" id="inputPlatform">
+<div
+  class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2"
+  id="inputPlatform"
+  data-payload='<%- JSON.stringify(payload) %>'>
   <div class="flex items-center gap-8">
-  <form class="flex items-center gap-2 w-full" id="barcodeForm">
-    <input
-      id="barcodeInput"
-      type="text"
-      placeholder="Barcode"
-      class="text-[20px] rounded-lg bg-white border border-gray-300 p-2 outline-none w-full"
-    />
+    <form class="flex items-center gap-2 w-full" id="barcodeForm">
+      <input
+        id="barcodeInput"
+        type="text"
+        placeholder="Barcode"
+        class="text-[20px] rounded-lg bg-white border border-gray-300 p-2 outline-none w-full"
+      />
+
+      <button
+        type="submit"
+        class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px] whitespace-nowrap"
+        id="barcodeButton"
+      >
+        Send liste
+      </button>
+    </form>
 
     <button
-      type="submit"
-      class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px] whitespace-nowrap"
-      id="barcodeButton"
+      class="bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap add-mode"
+      id="modeButton"
     >
-      Send liste
+      Tilføj Mode
     </button>
-  </form>
-
-  <button class="bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap add-mode" id="modeButton">
-    Tilføj Mode
-  </button>
+  </div>
 </div>
-  
-</div>
-<script src="/js/input.js"></script>
-<script src="/js/switch.js"></script>
-<script src="/js/submitBarcode.js"></script>
+<script src="/js/scanner_page/input/input.js"></script>
+<script src="/js/scanner_page/input/switch.js"></script>
+<script src="/js/scanner_page/input/submitBarcode.js"></script>

@@ -13,8 +13,8 @@
     "watch:css": "postcss src/public/css/input.css -o dist/public/css/style.css --watch",
     "watch:server": "esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js --watch",
     "dev:run": "nodemon dist/server.js",
-    "build:frontend": "esbuild src/public/ts/**/*.ts --bundle --minify --outdir=dist/public/js",
-    "watch:frontend": "esbuild src/public/ts/**/*.ts --bundle --outdir=dist/public/js --watch",
+    "build:frontend": "esbuild src/public/ts/**/*.ts --bundle --minify --outbase=src/public/ts --outdir=dist/public/js",
+    "watch:frontend": "esbuild src/public/ts/**/*.ts --bundle --outbase=src/public/ts --outdir=dist/public/js --watch",
     "dev": "concurrently -k \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
   },
   "devDependencies": {
