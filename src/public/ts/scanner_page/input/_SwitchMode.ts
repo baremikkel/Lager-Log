@@ -13,23 +13,27 @@ class SwitchMode {
 
   private handleAction(e: MouseEvent): void {
     e.preventDefault();
+    this.isAddMode = !this.isAddMode;
+
     const STYLES = {
-      remove: {
-        btn: "bg-red-400 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 font-medium text-[20px] whitespace-nowrap remove-mode",
-        platform: "bg-red-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2",
-      },
       add: {
-        btn: "bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap add-mode",
+        label: "Tilføj Mode",
+        btn: "bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap",
         platform: "bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2",
+      },
+      remove: {
+        label: "Fjern Mode",
+        btn: "bg-red-400 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 font-medium text-[20px] whitespace-nowrap",
+        platform: "bg-red-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2",
       },
     };
 
-    this.isAddMode = !this.isAddMode;
-
     if (this.isAddMode) {
-      this.updateUI("Fjern Mode", STYLES.add.btn, STYLES.add.platform);
+      this.updateUI(STYLES.add.label, STYLES.add.btn, STYLES.add.platform);
+      this.button.setAttribute("data-mode", 'add');
     } else {
-      this.updateUI("Tilføj Mode", STYLES.remove.btn, STYLES.remove.platform);
+      this.updateUI(STYLES.remove.label, STYLES.remove.btn, STYLES.remove.platform);
+      this.button.setAttribute("data-mode", 'remove');
     }
   }
 
