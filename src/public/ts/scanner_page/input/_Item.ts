@@ -1,4 +1,4 @@
-class ItemLister {
+class ItemList {
   private product: any;
   private template: HTMLTemplateElement;
   private count: number = 0;
@@ -6,6 +6,7 @@ class ItemLister {
   private countDisplay: HTMLElement;
   private nameDisplay: HTMLElement;
   private barcodeDisplay: HTMLElement;
+
   constructor(product: any, template: HTMLTemplateElement) {
     this.product = product;
     this.template = template;
@@ -29,12 +30,14 @@ class ItemLister {
       return;
     }
     this.checkMode();
-    
+
     this.handler(clone, incBtn, decBtn);
   }
   private checkMode() {
-    const mode = document.getElementById("modeButton")?.getAttribute("data-mode");
-    this.count = mode === "add" ? this.count+1 : this.count-1;
+    const mode = document
+      .getElementById("modeButton")
+      ?.getAttribute("data-mode");
+    this.count = mode === "add" ? this.count + 1 : this.count - 1;
   }
 
   private handler(
@@ -47,14 +50,14 @@ class ItemLister {
 
     incBtn.onclick = () => this.updateCount(1);
     decBtn.onclick = () => this.updateCount(-1);
-    const container = document.getElementById("scannedProductsContainer")
+    const container = document.getElementById("scannedProductsContainer");
     if (!container) {
       console.error("Container for scanned products not found");
       return;
     }
 
     container.appendChild(clone);
-    this.element.setAttribute('id', this.product.product_barcode);
+    this.element.setAttribute("id", this.product.product_barcode);
 
     this.updateUI();
   }
@@ -74,4 +77,4 @@ class ItemLister {
     }
   }
 }
-export { ItemLister };
+export { ItemList };

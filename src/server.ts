@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
-import pageRoutes from './routes/pages';
-import apiRoutes from './routes/api';
+import {page_router} from './routes/pages';
+import {api_router} from './routes/api';
 
 
 const app = express();
@@ -12,8 +12,8 @@ app.set('views', path.join(process.cwd(), 'views'));
 app.use(express.static(path.join(process.cwd(), 'dist', 'public')));
 app.use('/images', express.static(path.join(process.cwd(), 'src', 'public', 'images')));
 app.use(express.json());
-app.use('/api', apiRoutes);
-app.use('/', pageRoutes);
+app.use('/api', api_router);
+app.use('/', page_router);
 app.listen(PORT, () => {
     console.log(`Server active at http://localhost:${PORT}`);
 });
