@@ -75,6 +75,13 @@ async function getUnitIdByName(unit: string): Promise<QuantityUnit> {
     return rows[0];
 }
 
+async function addNewProduct(barcode: string, title: string, stock: number, unitId: number) {
+    await pool.query(
+        'INSERT INTO products (product_barcode, product_name, stock, std_unit_id) VALUES ($1, $2, $3, $4)',
+        [barcode, title, stock, unitId]
+    );
+}
 
-export {setupDatabase, getAllProducts, getAllCategories, getAllUnits, getProductByBarcode, getProductIdByBarcode, getUnitById, getUnitIdByName};
+
+export {setupDatabase, getAllProducts, getAllCategories, getAllUnits, getProductByBarcode, getProductIdByBarcode, getUnitById, getUnitIdByName, addNewProduct};
 export default pool;

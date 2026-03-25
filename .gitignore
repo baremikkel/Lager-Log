@@ -1,32 +1,20 @@
-# Dependency directories
 node_modules/
 jspm_packages/
 
-# TypeScript Build Output
-# We ignore 'dist' because we only want to track the 'src' files.
-# The server will rebuild 'dist' on the hosting platform.
 dist/
 
-# Tailwind / CSS Build Output (if you output to a specific file)
-# If your style.css is auto-generated into public/css, ignore it:
-# src/public/css/style.css
-
-# Environment Variables
 .env
 .env.local
 .env.*.local
 
-# IDE / Editor folders
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS Metadata
 .DS_Store
 Thumbs.db
 
-# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

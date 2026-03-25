@@ -1,4 +1,4 @@
-import { SubmitBarcode } from "./_SubmitBarcode";
+import { SubmitProduct } from "./_SubmitProduct";
 
 document.addEventListener('DOMContentLoaded', () => {
     const inputPlatform = document.getElementById('inputPlatform') as HTMLDivElement
@@ -8,12 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const payloadData = inputPlatform.getAttribute('data-payload');
     const payload_list = payloadData ? JSON.parse(payloadData) : [];
-
     inputPlatform.removeAttribute('data-payload');
 
     if (!barcodeForm || !barcodeInput || !inputPlatform || !productListTemplate) {
-        console.log('Not all elements found')
+        console.warn('Not all elements found')
         return;
     }
-    new SubmitBarcode(barcodeForm, barcodeInput, productListTemplate, payload_list.products);
+    new SubmitProduct(barcodeForm, barcodeInput, productListTemplate, payload_list.products);
 })

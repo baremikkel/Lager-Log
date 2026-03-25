@@ -1,27 +1,27 @@
 import { Router, Request, Response } from 'express';
-import { hasProductAllready } from '../services/collector';
 import logger from '../logger';
+import { addNewProduct } from '../services/database/databaseClient';
 
-const router = Router();
+const api_router = Router();
 
-router.get('/scanner', async (req: Request, res: Response) => {
-    const barcode = req.query.barcode as string;
+api_router.post('/scanner', async (req: Request, res: Response) => {
+    logger.info('hello there')
+    const barcode = req.body.product_barcode;
+    const product_name = req.body.product_name;
+    const units_per_item = req.body.units_per_item;
+    const unit_type = req.body.unit_type;
 
     if (!barcode) {
         return res.status(400).json({ error: "Item code is required" });
     }
 
     logger.info(`[Backend] Received new item: ${barcode}`);
-    const checker = await hasProductAllready(barcode);
-    if (!checker) { 
-        res.status(200).json({ message: "Item not found" });
-        return;
+    try {
+        await addNewProduct(barcode, product_name, units_per_item, unit_type);
+        res.status(200).json({ message: "Item added successfully!" });
+    } catch (error) {
+        logger.error(`[Backend] Error adding new item: ${error}`);
+        return res.status(500).json({ error: "Failed to add new item" });
     }
-
-    res.status(201).json({ 
-        message: "Item added successfully!",
-        data: { id: Date.now(), name: barcode }
-    });
 });
-
-export default router;
+export {api_router};
