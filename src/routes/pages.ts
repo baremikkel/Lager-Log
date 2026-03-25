@@ -29,7 +29,8 @@ page_router.get('/categories', (req: Request, res: Response) => {
 });
 
 page_router.get('/products', (req: Request, res: Response) => {
-    res.send("This is the inventory page!");
+        res.render('products_page', {title: 'Produkter'})
+
 });
     
 page_router.get('/fruit_vegetables', (req: Request, res: Response) => {

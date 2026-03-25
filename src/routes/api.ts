@@ -14,8 +14,6 @@ api_router.post('/scanner', async (req: Request, res: Response) => {
     if (!barcode) {
         return res.status(400).json({ error: "Item code is required" });
     }
-
-    logger.info(`[Backend] Received new item: ${barcode}`);
     try {
         await addNewProduct(barcode, product_name, units_per_item, unit_type);
         res.status(200).json({ message: "Item added successfully!" });
