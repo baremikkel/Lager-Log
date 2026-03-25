@@ -20,8 +20,20 @@ page_router.get('/scanner', async (req: Request, res: Response)=> {
     res.render('scanner_page', {title: 'Scanner', payload: payload})
 })
 
-page_router.get('/about', (req: Request, res: Response) => {
-    res.send("This is the about page!");
+page_router.get('/inventory', (req: Request, res: Response) => {
+    res.send("This is the inventory page!");
+});
+
+page_router.get('/categories', (req: Request, res: Response) => {
+    res.send("This is the categories page!");
+});
+
+page_router.get('/products', (req: Request, res: Response) => {
+    res.send("This is the inventory page!");
+});
+    
+page_router.get('/fruit_vegetables', (req: Request, res: Response) => {
+    res.send("This is the fruit and vegetables page!");
 });
 
 export {page_router};
