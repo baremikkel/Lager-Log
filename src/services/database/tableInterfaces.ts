@@ -15,7 +15,6 @@ export interface Inventory {
     product_amount: number;
 }
 
-
 export interface Product {
     id: number;
     product_barcode: string;
