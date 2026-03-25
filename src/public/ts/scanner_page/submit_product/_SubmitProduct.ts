@@ -1,5 +1,5 @@
 import logger from "../../../../logger"
-import { ItemList as ItemList } from "./_Item"
+import { ItemList as ItemList } from "../list/_Item"
 
 class SubmitProduct {
     private barcodeForm: HTMLFormElement

@@ -1,4 +1,4 @@
-import { ItemList } from "./_Item"
+import { ItemList } from "../list/_Item"
 
 class CreateProduct {
     private productForm: HTMLFormElement
