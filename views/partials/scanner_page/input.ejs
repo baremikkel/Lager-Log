@@ -1,0 +1,36 @@
+<div
+  class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2"
+  id="inputPlatform"
+  data-payload='<%- JSON.stringify(payload) %>'>
+  <%- include("modal", { payload: payload }) %>
+  <h1 class="text-2xl font-bold mb-4">Indtast Barcode</h1>
+  <div class="flex items-center gap-12">
+    <form class="flex items-center gap-2 w-full" id="barcodeForm">
+      <input
+        id="barcodeInput"
+        type="text"
+        placeholder="Barcode"
+        class="text-[20px] rounded-lg bg-white border border-gray-300 p-2.25 outline-none w-full"
+      />
+
+      <button
+        type="submit"
+        class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px] whitespace-nowrap"
+        id="barcodeButton"
+      >
+        Tilføj manuelt
+      </button>
+    </form>
+
+    <button
+      class="bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap" data-mode="add"
+      id="modeButton"
+    >
+      Tilføj Mode
+    </button>
+  </div>
+</div>
+<script src="/js/scanner_page/input/input.js"></script>
+<script src="/js/scanner_page/input/switch.js"></script>
+<script src="/js/scanner_page/submit_product/submitProduct.js"></script>
+<script src="/js/scanner_page/create_product/createNewProduct.js"></script>
