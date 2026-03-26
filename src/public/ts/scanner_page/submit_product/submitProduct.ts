@@ -6,13 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const barcodeInput = document.getElementById('barcodeInput') as HTMLInputElement
     const productListTemplate = document.getElementById('itemListTemplate') as HTMLTemplateElement
 
-    const payloadData = inputPlatform.getAttribute('data-payload');
-    const payload_list = payloadData ? JSON.parse(payloadData) : [];
-    inputPlatform.removeAttribute('data-payload');
-
+    const productData = inputPlatform.getAttribute('data-products');
+    const list = productData ? JSON.parse(productData) : [];
+    inputPlatform.removeAttribute('data-products');
     if (!barcodeForm || !barcodeInput || !inputPlatform || !productListTemplate) {
         console.warn('Not all elements found')
         return;
     }
-    new SubmitProduct(barcodeForm, barcodeInput, productListTemplate, payload_list.products);
+    new SubmitProduct(barcodeForm, barcodeInput, productListTemplate, list);
 })

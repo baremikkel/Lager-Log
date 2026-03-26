@@ -30,9 +30,9 @@
                                     <select name="unitSelect" id="unitSelect" 
                                             class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500">
                                         <option value="">Vælg...</option>
-                                            <% payload.units.forEach(function(u) { %>
-                                                <option value="<%= u.id %>">
-                                                    <%= u.unit %>
+                                            <% units.forEach(function(unit) { %>
+                                                <option value="<%= unit.id %>">
+                                                    <%= unit.unit %>
                                                 </option>
                                             <% }); %>
                                     </select>

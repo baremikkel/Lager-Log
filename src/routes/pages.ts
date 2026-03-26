@@ -9,31 +9,26 @@ page_router.get('/', (req: Request, res: Response) => {
 });
 
 page_router.get('/scanner', async (req: Request, res: Response)=> {
-    const units = await getAllUnits();
     const products = await getAllProducts();
-    const categories = await getAllCategories();
-    const payload = {
-        units: units,
-        products: products,
-        categories: categories
-    }
-    res.render('scanner_page', {title: 'Scanner', payload: payload})
+    const units = await getAllUnits();
+    res.render('scanner_page', {title: 'Scanner', products: products, units: units})
 })
 
-page_router.get('/inventory', (req: Request, res: Response) => {
+page_router.get('/inventory', async (req: Request, res: Response) => {
     res.send("This is the inventory page!");
 });
 
-page_router.get('/categories', (req: Request, res: Response) => {
-    res.send("This is the categories page!");
+page_router.get('/categories', async (req: Request, res: Response) => {
+    const categories = await getAllCategories();
+    res.render('categories_page', {title: 'Kategorier', categories: Array.isArray(categories) ? categories : []});
 });
 
-page_router.get('/products', (req: Request, res: Response) => {
-        res.render('products_page', {title: 'Produkter'})
-
+page_router.get('/products', async (req: Request, res: Response) => {
+    const products = await getAllProducts();
+    res.render('products_page', {title: 'Produkter', products: Array.isArray(products) ? products : []});
 });
     
-page_router.get('/fruit_vegetables', (req: Request, res: Response) => {
+page_router.get('/fruit_vegetables', async (req: Request, res: Response) => {
     res.send("This is the fruit and vegetables page!");
 });
 
