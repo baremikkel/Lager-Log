@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS inventory (
     id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL UNIQUE REFERENCES products(id) ON DELETE CASCADE,
     std_unit_id INTEGER NOT NULL REFERENCES quantity_units(id) ON DELETE CASCADE,
     product_amount NUMERIC NOT NULL
 );
