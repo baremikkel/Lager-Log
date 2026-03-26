@@ -12,7 +12,6 @@ class SubmitProduct {
         this.barcodeInput = barcodeInput
         this.productListTemplate = productListTemplate
         this.products = products
-
         this.barcodeForm.addEventListener('submit', (e: Event) => {
            this.addProduct(e)
         })
