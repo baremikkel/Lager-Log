@@ -3,13 +3,13 @@
   id="inputPlatform"
   data-products='<%- JSON.stringify(products) %>'>
   <%- include("modal", { products: products, units: units }) %>
-  <h1 class="text-2xl font-bold mb-4">Indtast Barcode</h1>
+  <h1 class="text-2xl font-bold mb-4">Indtast Stregkode eller brug scanner</h1>
   <div class="flex items-center gap-12">
     <form class="flex items-center gap-2 w-full" id="barcodeForm">
       <input
         id="barcodeInput"
         type="text"
-        placeholder="Barcode"
+        placeholder="Stregkode"
         class="text-[20px] rounded-lg bg-white border border-gray-300 p-2.25 outline-none w-full"
       />
 
