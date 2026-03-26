@@ -14,8 +14,9 @@ page_router.get('/scanner', async (req: Request, res: Response)=> {
     res.render('scanner_page', {title: 'Scanner', products: products, units: units})
 })
 
-page_router.get('/inventory', async (req: Request, res: Response) => {
-    res.send("This is the inventory page!");
+page_router.get('/lager', async (req: Request, res: Response) => {
+    
+    res.render('inventory_page', {title: 'Lager'});
 });
 
 page_router.get('/categories', async (req: Request, res: Response) => {
