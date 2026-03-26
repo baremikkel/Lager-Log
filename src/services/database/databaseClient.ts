@@ -3,6 +3,7 @@ import path from "path";
 import * as fs from "fs";
 import { Pool } from "pg";
 import { Category, Product, QuantityUnit } from "./tableInterfaces";
+import logger from "../../logger";
 
 dotenv.config();
 
@@ -112,10 +113,32 @@ async function addNewProduct(
 }
 
 async function addToInventory(product_id: number, unit_id: number, amount: number) {
-  await pool.query(
-    "INSERT INTO inventory (product_id, std_unit_id, product_amount) VALUES ($1, $2, $3)",
-    [product_id, unit_id, amount],
-  );
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    await client.query(
+      `INSERT INTO inventory (product_id, std_unit_id, product_amount) 
+       VALUES ($1, $2, $3)
+       ON CONFLICT (product_id) 
+       DO UPDATE SET 
+         product_amount = inventory.product_amount + EXCLUDED.product_amount,
+         std_unit_id = EXCLUDED.std_unit_id`,
+      [product_id, unit_id, amount]
+    );
+
+    await client.query(
+      `DELETE FROM inventory WHERE product_id = $1 AND product_amount <= 0`,
+      [product_id]
+    );
+
+    await client.query('COMMIT');
+  } catch (e) {
+    await client.query('ROLLBACK');
+    throw e;
+  } finally {
+    client.release();
+  }
 }
 
 export {
