@@ -54,10 +54,10 @@ class SubmitProduct {
 
     private getList() {
         document.querySelectorAll("#scannedProductsContainer .item-container").forEach((item) => {
+            const barcode = item.querySelector(".product-barcode")?.textContent;
             const count = parseInt(item.querySelector(".count")?.textContent || "0");
-            const stock = parseInt(item.getAttribute("data-stock") || "0");
             const units = parseInt(item.getAttribute("data-units") || "0");
-            this.list.push({count, stock, units });
+            this.list.push({barcode, count, units });
         });
     }
 

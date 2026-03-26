@@ -58,7 +58,6 @@ class ItemList {
 
     container.appendChild(clone);
     this.element.setAttribute("id", this.product.product_barcode);
-    this.element.setAttribute("data-stock", this.product.stock);
     this.element.setAttribute("data-units", this.product.std_unit_id);
 
     this.updateUI();

@@ -77,7 +77,7 @@ async function getProductIdByBarcode(
   product_barcode: string,
 ): Promise<Product> {
   const { rows } = await pool.query(
-    "SELECT id FROM products WHERE barcode = $1",
+    "SELECT id FROM products WHERE product_barcode = $1",
     [product_barcode],
   );
   return rows[0];
@@ -111,6 +111,13 @@ async function addNewProduct(
   );
 }
 
+async function addToInventory(product_id: number, unit_id: number, amount: number) {
+  await pool.query(
+    "INSERT INTO inventory (product_id, std_unit_id, product_amount) VALUES ($1, $2, $3)",
+    [product_id, unit_id, amount],
+  );
+}
+
 export {
   setupDatabase,
   getAllProducts,
@@ -121,5 +128,6 @@ export {
   getUnitById,
   getUnitIdByName,
   addNewProduct,
+  addToInventory,
 };
 export default pool;
