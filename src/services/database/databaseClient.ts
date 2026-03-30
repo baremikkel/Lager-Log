@@ -165,6 +165,11 @@ async function getInventory(): Promise<Inventory[]> {
   return rows;
 }
 
+async function addCategory(categoryName: string) {
+    const row = await pool.query("INSERT INTO categories (name) VALUES ($1)", [categoryName]);
+    return row;
+}
+
 export {
   setupDatabase,
   getAllProducts,
@@ -174,5 +179,6 @@ export {
   addNewProduct,
   addToInventory,
   getInventory,
+  addCategory,
 };
 export default pool;

@@ -4,6 +4,7 @@ import {
   addNewProduct,
   addToInventory,
   getProductIdByBarcode,
+  addCategory
 } from "../services/database/databaseClient";
 
 const api_router = Router();
@@ -39,6 +40,20 @@ api_router.post("/scanner/list", async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to process list" });
   }
   
+});
+
+api_router.post("/categories", async (req: Request, res: Response) => {
+  const categoryName = req.body.name;
+  logger.info(`[Backend] Received category name: ${categoryName}`);
+  if (!categoryName) {
+    return res.status(400).json({ error: "Category name is required" });
+  }
+  try {
+    await addCategory(categoryName);
+    res.status(200).send();
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to add category" });
+  }
 });
 
 export { api_router };
