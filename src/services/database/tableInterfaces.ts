@@ -11,7 +11,6 @@ export interface Category {
 export interface Inventory {
     id: number;
     product_id: number;
-    std_unit_id: number;
     product_amount: number;
 }
 
@@ -20,7 +19,6 @@ export interface Product {
     product_barcode: string;
     product_name: string;
     stock: number;
-    std_unit_id: number; 
 }
 
 export interface Recipe {
@@ -35,6 +33,5 @@ export interface RecipeIngredient {
     product_id: number;
     recipe_id: number; 
     amount: number;
-    std_unit_id: number;
     note?: string;
 }

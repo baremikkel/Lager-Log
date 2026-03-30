@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllCategories, getAllProducts, getAllUnits } from '../services/database/databaseClient';
+import { getAllCategories, getAllProducts } from '../services/database/databaseClient';
 import logger from '../logger';
 
 const page_router = Router();
@@ -10,8 +10,7 @@ page_router.get('/', (req: Request, res: Response) => {
 
 page_router.get('/scanner', async (req: Request, res: Response)=> {
     const products = await getAllProducts();
-    const units = await getAllUnits();
-    res.render('scanner_page', {title: 'Scanner', products: products, units: units})
+    res.render('scanner_page', {title: 'Scanner', products: products})
 })
 
 page_router.get('/lager', async (req: Request, res: Response) => {

@@ -2,10 +2,13 @@ import express from 'express';
 import path from 'path';
 import {page_router} from './routes/pages';
 import {api_router} from './routes/api';
+import { setupDatabase } from './services/database/databaseClient';
 
 
 const app = express();
 const PORT = 3000;
+
+await setupDatabase();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
