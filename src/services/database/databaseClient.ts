@@ -20,7 +20,7 @@ async function setupDatabase() {
 
   try {
     console.log("Connected to PostgreSQL. Starting schema load...");
-    const sqlFilePath = path.resolve(__dirname, "setup.sql");
+    const sqlFilePath = path.resolve('./src/services/database', "setup.sql");
 
     if (!fs.existsSync(sqlFilePath)) {
       throw new Error(`SQL file not found at ${sqlFilePath}`);
@@ -76,10 +76,21 @@ async function addNewProduct(
   title: string,
   stock: number,
 ) {
-  await pool.query(
-    "INSERT INTO products (product_barcode, product_name, stock) VALUES ($1, $2, $3)",
-    [barcode, title, stock],
-  );
+  const conn = await pool.connect();
+  try {
+    await conn.query("BEGIN");
+    const result = await conn.query("INSERT INTO products (product_barcode, product_name, stock) VALUES ($1, $2, $3) RETURNING id", [barcode, title, stock]);
+    const newProductId = result.rows[0].id;
+
+    await conn.query("INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2)", [newProductId, 1]);
+
+  await conn.query("COMMIT");
+  } catch (e) {
+    await conn.query("ROLLBACK");
+    throw e;
+  } finally {
+    conn.release();
+  }
 }
 
 async function addToInventory(

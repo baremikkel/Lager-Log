@@ -15,13 +15,12 @@ page_router.get('/scanner', async (req: Request, res: Response)=> {
 
 page_router.get('/inventory', async (req: Request, res: Response) => {
     const inventory = await getInventory();
-    logger.info(`[Backend] Inventory data: ${JSON.stringify(inventory)}`);
     res.render('inventory_page', {title: 'Lager', items: inventory});
 });
 
 page_router.get('/categories', async (req: Request, res: Response) => {
     const categories = await getAllCategories();
-    res.render('categories_page', {title: 'Kategorier', categories: Array.isArray(categories) ? categories : []});
+    res.render('category_page', {title: 'Kategorier', categories: Array.isArray(categories) ? categories : []});
 });
 
 page_router.get('/products', async (req: Request, res: Response) => {

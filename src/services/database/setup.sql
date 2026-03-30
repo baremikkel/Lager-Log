@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     product_barcode TEXT UNIQUE NOT NULL,
     product_name TEXT NOT NULL,
-    stock NUMERIC NOT NULL,
+    stock NUMERIC NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS inventory (
@@ -38,5 +38,5 @@ CREATE TABLE IF NOT EXISTS product_categories (
 );
 
 INSERT INTO categories (name) 
-VALUES ('Frugt og Grønt'), ('Mejeri'), ('Kød og Fisk')
+VALUES ('Ukategoriseret'),('Frugt og Grønt'), ('Mejeri'), ('Kød og Fisk')
 ON CONFLICT (name) DO NOTHING;
