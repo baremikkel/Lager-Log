@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../layouts/header') %>
+<%- include('../layouts/header') %>
   <body class="bg-sky-200 flex flex-col items-center gap-8 my-10 px-3">
     <%- include('../layouts/navigation_bar/navigation_bar') %>
-    <%- include('../partials/category_page/input', {categories: categories}) %>
-    <%- include('../partials/category_page/category_list', {categories: categories}) %>
-    <% categories.forEach(category => { %>
-        <%- include('../partials/category_page/accordian', {category: category}) %>
-    <% });  %>
-
-
-    
+    <div class="bg-white p-4 rounded-lg border border-gray-100 w-3/5">
+      <%- include('../partials/category_page/input', {categories: categories}) %>
+      <%- include('../partials/category_page/category_list', {categories: categories}) %>
+    </div>
+      <% categories.forEach(category=> { %>
+      <%- include('../partials/category_page/accordian', {category: category}) %>
+      <% }); %>
   </body>
 </html>
