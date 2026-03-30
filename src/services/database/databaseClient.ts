@@ -170,6 +170,44 @@ async function addCategory(categoryName: string) {
     return row;
 }
 
+async function updateCategory(productNames: string[], categoryNames: string[]) {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        const categoryIdsResult = await client.query(
+            `SELECT id FROM categories WHERE name = ANY($1)`,
+            [categoryNames],
+        );
+        const categoryIds = categoryIdsResult.rows.map((row) => row.id);
+        const productIdsResult = await client.query(
+            `SELECT id FROM products WHERE product_name = ANY($1)`,
+            [productNames],
+        );
+        const productIds = productIdsResult.rows.map((row) => row.id);
+        
+        // Remove all existing categories for these products
+        await client.query(
+            `DELETE FROM product_categories WHERE product_id = ANY($1)`,
+            [productIds],
+        );
+        
+        for (const categoryId of categoryIds) {
+            for (const productId of productIds) {
+                await client.query(
+                    `INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+                    [productId, categoryId],
+                );
+            }
+        }
+        await client.query("COMMIT");
+    } catch (e) {
+        await client.query("ROLLBACK");
+        throw e;
+    } finally {
+        client.release();
+    }
+}
+
 export {
   setupDatabase,
   getAllProducts,
@@ -180,5 +218,6 @@ export {
   addToInventory,
   getInventory,
   addCategory,
+  updateCategory,
 };
 export default pool;

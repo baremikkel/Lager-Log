@@ -4,7 +4,8 @@ import {
   addNewProduct,
   addToInventory,
   getProductIdByBarcode,
-  addCategory
+  addCategory,
+  updateCategory
 } from "../services/database/databaseClient";
 
 const api_router = Router();
@@ -53,6 +54,20 @@ api_router.post("/categories", async (req: Request, res: Response) => {
     res.status(200).send();
   } catch (error) {
     return res.status(500).json({ error: "Failed to add category" });
+  }
+});
+
+api_router.post("/categories/update", async (req: Request, res: Response) => {
+  const { selectedProducts, selectedCategories } = req.body;
+  logger.info(`[Backend] Received update category request: ${JSON.stringify(req.body)}`);
+  if (!selectedProducts || !selectedCategories) {
+    return res.status(400).json({ error: "Selected products and categories are required" });
+  }
+  try {
+    await updateCategory(selectedProducts, selectedCategories);
+    res.status(200).send();
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to update categories" });
   }
 });
 
