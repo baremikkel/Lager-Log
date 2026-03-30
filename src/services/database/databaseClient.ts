@@ -37,25 +37,12 @@ async function setupDatabase() {
 }
 
 async function getAllProducts(): Promise<Product[]> {
-  const { rows } = await pool.query(`SELECT
-    p.id,
-    p.product_name, 
-    p.product_barcode,
-    p.stock,
-    p.std_unit_id,
-    q.unit 
-    FROM products AS p
-    INNER JOIN quantity_units AS q ON p.std_unit_id = q.id`);
+  const { rows } = await pool.query(`SELECT * FROM products`);
   return rows;
 }
 
 async function getAllCategories(): Promise<Category[]> {
   const { rows } = await pool.query("SELECT * FROM categories");
-  return rows;
-}
-
-async function getAllUnits(): Promise<QuantityUnit[]> {
-  const { rows } = await pool.query("SELECT * FROM quantity_units");
   return rows;
 }
 
@@ -104,27 +91,25 @@ async function addNewProduct(
   barcode: string,
   title: string,
   stock: number,
-  unitId: number,
 ) {
   await pool.query(
-    "INSERT INTO products (product_barcode, product_name, stock, std_unit_id) VALUES ($1, $2, $3, $4)",
-    [barcode, title, stock, unitId],
+    "INSERT INTO products (product_barcode, product_name, stock) VALUES ($1, $2, $3)",
+    [barcode, title, stock],
   );
 }
 
-async function addToInventory(product_id: number, unit_id: number, amount: number) {
+async function addToInventory(product_id: number, amount: number) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
     await client.query(
-      `INSERT INTO inventory (product_id, std_unit_id, product_amount) 
-       VALUES ($1, $2, $3)
+      `INSERT INTO inventory (product_id, product_amount) 
+       VALUES ($1, $2)
        ON CONFLICT (product_id) 
        DO UPDATE SET 
-         product_amount = inventory.product_amount + EXCLUDED.product_amount,
-         std_unit_id = EXCLUDED.std_unit_id`,
-      [product_id, unit_id, amount]
+         product_amount = inventory.product_amount + EXCLUDED.product_amount`,
+      [product_id, amount]
     );
 
     await client.query(
@@ -145,7 +130,6 @@ export {
   setupDatabase,
   getAllProducts,
   getAllCategories,
-  getAllUnits,
   getProductByBarcode,
   getProductIdByBarcode,
   getUnitById,

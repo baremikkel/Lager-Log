@@ -1,20 +1,13 @@
-CREATE TABLE IF NOT EXISTS quantity_units (
-    id SERIAL PRIMARY KEY,
-    unit TEXT UNIQUE NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     product_barcode TEXT UNIQUE NOT NULL,
     product_name TEXT NOT NULL,
     stock NUMERIC NOT NULL,
-    std_unit_id INTEGER REFERENCES quantity_units(id)
 );
 
 CREATE TABLE IF NOT EXISTS inventory (
     id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL UNIQUE REFERENCES products(id) ON DELETE CASCADE,
-    std_unit_id INTEGER NOT NULL REFERENCES quantity_units(id) ON DELETE CASCADE,
     product_amount NUMERIC NOT NULL
 );
 
@@ -30,7 +23,6 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     recipe_id INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
     amount REAL NOT NULL, 
-    std_unit_id INTEGER NOT NULL REFERENCES quantity_units(id) ON DELETE CASCADE,
     note TEXT
 );
 

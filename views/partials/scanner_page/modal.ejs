@@ -24,20 +24,6 @@
                                    placeholder="e.g 12 æg i en bakke"
                                    required>
                         </div>
-                        <div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Enhed</label>
-                                    <select name="unitSelect" id="unitSelect" 
-                                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="">Vælg...</option>
-                                            <% units.forEach(function(unit) { %>
-                                                <option value="<%= unit.id %>">
-                                                    <%= unit.unit %>
-                                                </option>
-                                            <% }); %>
-                                    </select>
-                                </div>
-                        </div>
                     </div>
                 </div>
 

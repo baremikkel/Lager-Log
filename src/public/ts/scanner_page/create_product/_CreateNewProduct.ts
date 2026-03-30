@@ -5,21 +5,18 @@ class CreateProduct {
     private modalBarcode: HTMLInputElement
     private modalProductName: HTMLInputElement
     private modalUnits: HTMLInputElement
-    private modalUnitselect: HTMLInputElement
     private inputBarcode: HTMLInputElement
 
     constructor(
         productForm: HTMLFormElement,
         modalBarcode: HTMLInputElement,
         modalProductName: HTMLInputElement,
-        modalUnits: HTMLInputElement,
-        modalUnitselect: HTMLInputElement
+        modalUnits: HTMLInputElement
     ) {
         this.productForm = productForm
         this.modalBarcode = modalBarcode
         this.modalProductName = modalProductName
         this.modalUnits = modalUnits
-        this.modalUnitselect = modalUnitselect
         this.inputBarcode = document.getElementById('barcodeInput') as HTMLInputElement
         this.modalBarcode.value = this.inputBarcode.value
 
@@ -34,7 +31,6 @@ class CreateProduct {
             product_barcode: this.modalBarcode.value,
             product_name: this.modalProductName.value,
             units_per_item: parseInt(this.modalUnits.value),
-            unit_type: this.modalUnitselect.value
         }
         const success = await this.saveProductPostRequest(newProduct)
         if(!success) {

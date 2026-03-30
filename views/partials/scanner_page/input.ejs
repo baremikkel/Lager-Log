@@ -2,7 +2,7 @@
   class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2"
   id="inputPlatform"
   data-products='<%- JSON.stringify(products) %>'>
-  <%- include("modal", { products: products, units: units }) %>
+  <%- include("modal", { products: products }) %>
   <h1 class="text-2xl font-bold mb-4">Indtast Stregkode eller brug scanner</h1>
   <div class="flex items-center gap-12">
     <form class="flex items-center gap-2 w-full" id="barcodeForm">
