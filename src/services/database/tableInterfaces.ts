@@ -1,7 +1,9 @@
 
 export interface Category {
-    id: number;
-    name: string;
+    product_id: number;
+    product: string;
+    category_id: number;
+    category: string;
 }
 
 export interface Inventory {
