@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import path from "path";
 import * as fs from "fs";
 import { Pool } from "pg";
-import { Category, Product, QuantityUnit } from "./tableInterfaces";
+import { Category, Inventory, Product } from "./tableInterfaces";
 import logger from "../../logger";
 
 dotenv.config();
@@ -37,7 +37,7 @@ async function setupDatabase() {
 }
 
 async function getAllProducts(): Promise<Product[]> {
-  const { rows } = await pool.query(`SELECT * FROM products`);
+  const { rows } = await pool.query("SELECT * FROM products");
   return rows;
 }
 
@@ -71,22 +71,6 @@ async function getProductIdByBarcode(
   return rows[0];
 }
 
-async function getUnitById(id: number): Promise<QuantityUnit> {
-  const { rows } = await pool.query(
-    "SELECT unit FROM quantity_units WHERE id = $1",
-    [id],
-  );
-  return rows[0];
-}
-
-async function getUnitIdByName(unit: string): Promise<QuantityUnit> {
-  const { rows } = await pool.query(
-    "SELECT id FROM quantity_units WHERE unit = $1",
-    [unit],
-  );
-  return rows[0];
-}
-
 async function addNewProduct(
   barcode: string,
   title: string,
@@ -98,10 +82,13 @@ async function addNewProduct(
   );
 }
 
-async function addToInventory(product_id: number, amount: number) {
+async function addToInventory(
+  product_id: number,
+  amount: number,
+) {
   const client = await pool.connect();
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     await client.query(
       `INSERT INTO inventory (product_id, product_amount) 
@@ -109,21 +96,32 @@ async function addToInventory(product_id: number, amount: number) {
        ON CONFLICT (product_id) 
        DO UPDATE SET 
          product_amount = inventory.product_amount + EXCLUDED.product_amount`,
-      [product_id, amount]
+      [product_id, amount],
     );
 
     await client.query(
       `DELETE FROM inventory WHERE product_id = $1 AND product_amount <= 0`,
-      [product_id]
+      [product_id],
     );
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
   } catch (e) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw e;
   } finally {
     client.release();
   }
+}
+
+async function getInventory(): Promise<Inventory[]> {
+  const { rows } = await pool.query(`SELECT 
+    p.product_barcode, 
+    p.product_name, 
+	  p.stock,
+    i.product_amount
+    FROM inventory AS i
+    JOIN products AS p ON i.product_id = p.id;`);
+  return rows;
 }
 
 export {
@@ -132,9 +130,8 @@ export {
   getAllCategories,
   getProductByBarcode,
   getProductIdByBarcode,
-  getUnitById,
-  getUnitIdByName,
   addNewProduct,
   addToInventory,
+  getInventory,
 };
 export default pool;

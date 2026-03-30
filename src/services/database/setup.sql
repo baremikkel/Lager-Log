@@ -37,11 +37,6 @@ CREATE TABLE IF NOT EXISTS product_categories (
     PRIMARY KEY (product_id, category_id)
 );
 
--- Standard units and categories
-INSERT INTO quantity_units (unit) 
-VALUES ('stk'), ('g'), ('ml'), ('spsk'), ('tsk')
-ON CONFLICT (unit) DO NOTHING;
-
 INSERT INTO categories (name) 
 VALUES ('Frugt og Grønt'), ('Mejeri'), ('Kød og Fisk')
 ON CONFLICT (name) DO NOTHING;
