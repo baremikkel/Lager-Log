@@ -1,7 +1,3 @@
-export interface QuantityUnit {
-    id: number;
-    unit: string;
-}
 
 export interface Category {
     id: number;

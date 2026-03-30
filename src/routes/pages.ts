@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllCategories, getAllProducts } from '../services/database/databaseClient';
+import { getAllCategories, getAllProducts, getInventory } from '../services/database/databaseClient';
 import logger from '../logger';
 
 const page_router = Router();
@@ -13,9 +13,10 @@ page_router.get('/scanner', async (req: Request, res: Response)=> {
     res.render('scanner_page', {title: 'Scanner', products: products})
 })
 
-page_router.get('/lager', async (req: Request, res: Response) => {
-    
-    res.render('inventory_page', {title: 'Lager'});
+page_router.get('/inventory', async (req: Request, res: Response) => {
+    const inventory = await getInventory();
+    logger.info(`[Backend] Inventory data: ${JSON.stringify(inventory)}`);
+    res.render('inventory_page', {title: 'Lager', items: inventory});
 });
 
 page_router.get('/categories', async (req: Request, res: Response) => {
