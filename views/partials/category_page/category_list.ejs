@@ -1,0 +1,7 @@
+<div class="flex flex-wrap gap-2 max-h-60 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-blue-200">
+    <% categories.forEach(category => { %>
+        <button class="inline-block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all cursor-pointer shadow-sm">
+            <p><%- category.name %></p>
+        </button>
+    <% }); %>
+</div>
