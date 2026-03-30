@@ -1,4 +1,4 @@
-import { addCategory } from "./_addCategory"
+import { addCategory } from "./_AddCategory"
 
 document.addEventListener('DOMContentLoaded', () => {
     const categoryInput = document.getElementById('categoryInput') as HTMLInputElement
