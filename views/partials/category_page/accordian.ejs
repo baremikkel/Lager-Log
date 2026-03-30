@@ -16,19 +16,22 @@
         </div>
     </button>
     <div id="dropdownMenu-<%- category.id %>"
-        class="absolute z-10 w-full mt-1 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 ease-out origin-top">
-        <div class="p-2 flex flex-wrap gap-2">
+    class="absolute z-10 w-full mt-1 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 ease-out origin-top">
+    <div class="p-2 flex flex-wrap gap-2">
+        
+        <% if (category.products && category.products.length > 0) { %>
             <% category.products.forEach(function(product) { %>
                 <button
+                    type="button"
                     class="inline-block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all cursor-pointer shadow-sm uncategorized-product"
                     data-product-id="<%- product.id %>">
-                    <p><%- product.name %></p>
+                    <%- product.name %>
                 </button>
+            <% }); %>
+        <% } else { %>
+            <p class="w-full px-4 py-2 text-sm text-gray-400 italic">Kategorien har ikke nogen produkter</p>
+        <% } %>
 
-                <% if (category.products.length===0) { %>
-                    <div class="w-full px-4 py-2 text-sm text-gray-400 italic">No products found</div>
-                    <% } %>
-                        <% }); %>
-        </div>
     </div>
+</div>
 </div>
