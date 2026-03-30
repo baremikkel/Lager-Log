@@ -42,8 +42,38 @@ async function getAllProducts(): Promise<Product[]> {
 }
 
 async function getAllCategories(): Promise<Category[]> {
-  const { rows } = await pool.query("SELECT * FROM categories");
-  return rows;
+  const { rows } = await pool.query(`
+    SELECT 
+      categories.id AS category_id,
+      categories.name AS category_name,
+      products.id AS product_id, 
+      products.product_name
+    FROM categories
+    LEFT JOIN product_categories ON categories.id = product_categories.category_id
+    LEFT JOIN products ON product_categories.product_id = products.id
+    ORDER BY categories.id;
+  `);
+
+  const categoriesMap = rows.reduce((bucket, row) => {
+    if (!bucket[row.category_id]) {
+      bucket[row.category_id] = {
+        id: row.category_id,
+        name: row.category_name,
+        products: []
+      };
+    }
+
+    if (row.product_id) {
+      bucket[row.category_id].products.push({
+        id: row.product_id,
+        name: row.product_name
+      });
+    }
+
+    return bucket;
+  }, {} as Record<number, Category>);
+
+  return Object.values(categoriesMap);
 }
 
 async function getProductByBarcode(
