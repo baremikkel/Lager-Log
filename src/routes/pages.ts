@@ -29,7 +29,7 @@ page_router.get('/products', async (req: Request, res: Response) => {
 });
     
 page_router.get('/fruit_vegetables', async (req: Request, res: Response) => {
-    res.send("This is the fruit and vegetables page!");
+    res.render('fruit_vegetables_page', {title: 'Frukt & Grønt'});
 });
 
 export {page_router};
