@@ -1,6 +1,6 @@
 <div class="bg-sky-100 p-4 rounded-2xl shadow-sm w-3/4 grid grid-cols-5 gap-3" id="productContainer">
     <% products.forEach(product => { %>
-        <div class="bg-white p-3 my-3 rounded-lg shadow-sm border border-sky-200 hover:border-sky-400 transition-all flex flex-col min-w-0" id="product_card_<%= product.id %>">
+        <div class="bg-white p-3 my-3 rounded-lg shadow-sm border border-sky-200 hover:border-sky-400 transition-all flex flex-col min-w-0" id="product_card_<%= product.id %>" data-stock="<%= product.stock %>">
             <h3 class="text[15px] font-bold text-slate-800 mb-1 leading-tight truncate" title="Produkt navn">
                 <%= product.product_name %>
             </h3>
@@ -16,18 +16,18 @@
                 <div class="flex flex-row items-center gap-1.5">
                     <div class="flex flex-col min-w-0">
                         <div class="flex flex-row gap-1">
-                            <p class="text-[11px] text-slate-600 truncate leading-tight"><%= product.product_amount || product.stock %> </p>
+                            <p class="text-[11px] text-slate-600 truncate leading-tight amount-display"><%= product.product_amount || product.stock %> </p>
                             <p class="text-[11px] text-slate-600 truncate leading-tight">pr enhed</p>
                     </div>
                         
-                        <p class="text-[10px] text-slate-400 truncate italic">
+                        <p class="text-[10px] text-slate-400 truncate italic total-display">
                              (<%= product.stock * product.product_amount | 0 %> stk på lager)
                         </p>
                     </div>
 
                     <div class="flex gap-1 ml-auto">
-                        <button class="bg-sky-500 text-white w-6 h-6 flex items-center justify-center rounded-md hover:bg-sky-600 transition-colors text-sm font-bold shadow-sm active:scale-95">+</button>
-                        <button class="bg-sky-500 text-white w-6 h-6 flex items-center justify-center rounded-md hover:bg-sky-600 transition-colors text-sm font-bold shadow-sm active:scale-95">-</button>
+                        <button type="button" class="bg-sky-500 text-white w-6 h-6 flex items-center justify-center rounded-md hover:bg-sky-600 transition-colors text-sm font-bold shadow-sm active:scale-95 increase-btn" data-product-id="<%= product.id %>">+</button>
+                        <button type="button" class="bg-sky-500 text-white w-6 h-6 flex items-center justify-center rounded-md hover:bg-sky-600 transition-colors text-sm font-bold shadow-sm active:scale-95 decrease-btn" data-product-id="<%= product.id %>">-</button>
                     </div>
                 </div>
             </div>
