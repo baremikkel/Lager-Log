@@ -3,13 +3,15 @@
 <%- include('../layouts/header') %>
   <body class="bg-sky-200 flex flex-col items-center gap-8 my-10 px-3">
     <%- include('../layouts/navigation_bar/navigation_bar') %>
-    <div class="bg-white p-4 rounded-lg border border-gray-100 w-3/5">
+    <div class="bg-white p-4 rounded-lg border border-gray-100 w-2/5">
       <%- include('../partials/category_page/input', {categories: categories}) %>
       <%- include('../partials/category_page/category_list', {categories: categories}) %>
     </div>
+    <div class="bg-white p-4 rounded-lg border border-gray-100 w-2/5">
       <% categories.forEach(category=> { %>
       <%- include('../partials/category_page/accordian', {category: category}) %>
       <% }); %>
+    </div>
   </body>
 </html>
 
