@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllCategories, getAllProducts, getInventory } from '../services/database/databaseClient';
+import { getAllCategories, getAllProducts, getFruitAndVegetables, getInventory } from '../services/database/databaseClient';
 import logger from '../logger';
 
 const page_router = Router();
@@ -29,7 +29,9 @@ page_router.get('/products', async (req: Request, res: Response) => {
 });
     
 page_router.get('/fruit_vegetables', async (req: Request, res: Response) => {
-    res.render('fruit_vegetables_page', {title: 'Frukt & Grønt'});
+    const fruitAndVegetables = await getFruitAndVegetables();
+    console.log(fruitAndVegetables);
+    res.render('fruit_vegetables_page', {title: 'Frugt & Grønt', products: fruitAndVegetables});
 });
 
 export {page_router};
