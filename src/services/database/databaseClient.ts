@@ -221,6 +221,14 @@ async function getFruitAndVegetables(): Promise<Product[]> {
   return rows;
 }
 
+async function updateProduct(id: number, product_barcode: string, product_name: string, stock: number) {
+  const result = await pool.query(
+    "UPDATE products SET product_barcode = $1, product_name = $2, stock = $3 WHERE id = $4",
+    [product_barcode, product_name, stock, id]
+  );
+  return result;
+}
+
 export {
   setupDatabase,
   getAllProducts,
@@ -233,5 +241,6 @@ export {
   addCategory,
   updateCategory,
   getFruitAndVegetables,
+  updateProduct,
 };
 export default pool;

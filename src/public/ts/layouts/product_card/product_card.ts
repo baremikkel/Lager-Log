@@ -1,3 +1,4 @@
+import { openEditModal } from "./edit_products";
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.increase-btn').forEach((btn: Element) => {
@@ -21,6 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('.bg-white').forEach((card: Element) => {
+        card.addEventListener('click', (event: Event) => {
+            if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+            
+            const productCard = card as HTMLElement;
+            const productId = productCard.id.replace('product_card_', '');
+            openEditModal(productId);
+        });
+    });
 });
 
 async function updateInventory(productId: number, delta: number, btn: HTMLButtonElement): Promise<void> {
@@ -33,8 +44,7 @@ async function updateInventory(productId: number, delta: number, btn: HTMLButton
             body: JSON.stringify({ product_id: productId, delta }),
         });
         if (response.ok) {
-            // Update the display
-            const card = btn.closest('.bg-white') as HTMLElement;
+            const card = btn.closest('#product_card_' + productId) as HTMLElement;
             if (!card) return;
 
             const amountEl = card.querySelector('.product-amount') as HTMLElement;
