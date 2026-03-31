@@ -18,8 +18,8 @@ api_router.post("/scanner", async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Item code is required" });
   }
   try {
-    await addNewProduct(barcode, product_name, units_per_item);
-    res.status(200).json({ message: "Item added successfully!" });
+    const newProductId = await addNewProduct(barcode, product_name, units_per_item);
+    res.status(200).json({ message: "Item added successfully!", id: newProductId });
   } catch (error) {
     logger.error(`[Backend] Error adding new item: ${error}`);
     return res.status(500).json({ error: "Failed to add new item" });

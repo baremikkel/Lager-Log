@@ -19,7 +19,6 @@ class CreateProduct {
         this.modalUnits = modalUnits
         this.inputBarcode = document.getElementById('barcodeInput') as HTMLInputElement
         this.modalBarcode.value = this.inputBarcode.value
-
         this.productForm.addEventListener('submit', (e: Event) => {
             this.createProduct(e)
         })
@@ -32,14 +31,14 @@ class CreateProduct {
             product_name: this.modalProductName.value,
             units_per_item: parseInt(this.modalUnits.value),
         }
-        const success = await this.saveProductPostRequest(newProduct)
-        if(!success) {
+        const createdProduct = await this.saveProductPostRequest(newProduct)
+        if (!createdProduct) {
             return;
         }
-
         this.productForm.reset()
-        new ItemList(newProduct, document.getElementById('itemListTemplate') as HTMLTemplateElement)
+        new ItemList(createdProduct, document.getElementById('itemListTemplate') as HTMLTemplateElement)
         document.getElementById("addProductModal")?.classList.add("hidden")
+        document.dispatchEvent(new CustomEvent('productCreated', { detail: createdProduct }))
     }
 
     private async saveProductPostRequest(newProduct: any) {
@@ -47,19 +46,19 @@ class CreateProduct {
         try {
             response = await fetch('api' + window.location.pathname, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newProduct)
             })
         } catch (error) {
             console.error('Error saving product:', error);
+            return null;
         }
-        if (!response) {
+        if (!response?.ok) {
             console.error('No response received from server.');
             return null;
         }
-        return true;
+        const { id } = await response.json()
+        return { ...newProduct, id }
     }
 }
 

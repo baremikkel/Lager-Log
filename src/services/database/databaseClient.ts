@@ -107,10 +107,11 @@ async function addNewProduct(
   stock: number,
 ) {
   const conn = await pool.connect();
+  let newProductId = 0;
   try {
     await conn.query("BEGIN");
     const result = await conn.query("INSERT INTO products (product_barcode, product_name, stock) VALUES ($1, $2, $3) RETURNING id", [barcode, title, stock]);
-    const newProductId = result.rows[0].id;
+    newProductId = result.rows[0].id;
 
     await conn.query("INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2)", [newProductId, 1]);
 
@@ -120,6 +121,7 @@ async function addNewProduct(
     throw e;
   } finally {
     conn.release();
+    return newProductId;
   }
 }
 
