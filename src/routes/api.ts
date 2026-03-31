@@ -73,7 +73,34 @@ api_router.post("/categories/update", async (req: Request, res: Response) => {
 
 api_router.post("/inventory/update", async (req: Request, res: Response) => {
   const { product_id, delta } = req.body;
-  logger.info(`[Backend] Received inventory update: product_id=${product_id}, delta=${delta}`);
+  if (!product_id || typeof delta !== 'number') {
+    return res.status(400).json({ error: "product_id and delta are required" });
+  }
+  try {
+    await addToInventory(product_id, delta);
+    res.status(200).json({ message: "Inventory updated successfully!" });
+  } catch (error) {
+    logger.error(`[Backend] Error updating inventory: ${error}`);
+    return res.status(500).json({ error: "Failed to update inventory" });
+  }
+});
+
+api_router.post("/products/update", async (req: Request, res: Response) => {
+  const { product_id, delta } = req.body;
+  if (!product_id || typeof delta !== 'number') {
+    return res.status(400).json({ error: "product_id and delta are required" });
+  }
+  try {
+    await addToInventory(product_id, delta);
+    res.status(200).json({ message: "Inventory updated successfully!" });
+  } catch (error) {
+    logger.error(`[Backend] Error updating inventory: ${error}`);
+    return res.status(500).json({ error: "Failed to update inventory" });
+  }
+});
+
+api_router.post("/fruit_vegetables/update", async (req: Request, res: Response) => {
+  const { product_id, delta } = req.body;
   if (!product_id || typeof delta !== 'number') {
     return res.status(400).json({ error: "product_id and delta are required" });
   }

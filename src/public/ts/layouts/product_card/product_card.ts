@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function updateInventory(productId: number, delta: number, btn: HTMLButtonElement): Promise<void> {
     try {
-        const response = await fetch('/api/inventory/update', {
+        const response = await fetch('api' + window.location.pathname + '/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ async function updateInventory(productId: number, delta: number, btn: HTMLButton
             const card = btn.closest('.bg-white') as HTMLElement;
             if (!card) return;
 
-            const amountEl = card.querySelector('.amount-display') as HTMLElement;
+            const amountEl = card.querySelector('.product-amount') as HTMLElement;
             if (!amountEl) return;
 
             let currentAmount = parseInt(amountEl.textContent?.trim() || '0');

@@ -164,7 +164,7 @@ async function getInventory(): Promise<Inventory[]> {
 	  p.stock,
     i.product_amount
     FROM inventory AS i
-    JOIN products AS p ON i.product_id = p.id;`);
+    JOIN products AS p ON i.product_id = p.id`);
   return rows;
 }
 
@@ -212,7 +212,7 @@ async function updateCategory(productNames: string[], categoryNames: string[]) {
 }
 
 async function getFruitAndVegetables(): Promise<Product[]> { 
-  const { rows } = await pool.query(`SELECT p.id, p.product_barcode, p.product_name, inventory.product_amount AS stock
+  const { rows } = await pool.query(`SELECT p.id, p.product_barcode, p.product_name, p.stock, inventory.product_amount
   FROM products p
   JOIN product_categories pc ON p.id = pc.product_id
   JOIN categories c ON pc.category_id = c.id
