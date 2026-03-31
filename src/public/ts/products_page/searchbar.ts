@@ -5,7 +5,8 @@ searchInput?.addEventListener('input', (e: Event) => {
     const target = e.target as HTMLInputElement;
     const searchTerm = target.value.toLowerCase();
     
-    const container = document.getElementById('scannedProductsContainer');
+    const container = document.getElementById('productContainer');
+    console.log(container);
     if (!container) return;
 
     const productCards = container.querySelectorAll(':scope > div');

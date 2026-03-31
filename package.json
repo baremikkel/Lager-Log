@@ -15,7 +15,7 @@
     "dev:run": "nodemon dist/server.js",
     "build:frontend": "esbuild src/public/ts/**/*.ts --bundle --minify --outbase=src/public/ts --outdir=dist/public/js",
     "watch:frontend": "esbuild src/public/ts/**/*.ts --bundle --outbase=src/public/ts --outdir=dist/public/js --watch",
-    "copy:assets": "copyfiles -u 2 src/views/images/**/* dist/public",
+    "copy:assets": "copyfiles -u 2 src/views/images/**/* dist/public && copyfiles -u 1 src/views/layouts dist/public",
     "dev": "npm run copy:assets && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
   },
   "devDependencies": {
