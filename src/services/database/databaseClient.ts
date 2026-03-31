@@ -158,6 +158,7 @@ async function addToInventory(
 
 async function getInventory(): Promise<Inventory[]> {
   const { rows } = await pool.query(`SELECT 
+    p.id,
     p.product_barcode, 
     p.product_name, 
 	  p.stock,
