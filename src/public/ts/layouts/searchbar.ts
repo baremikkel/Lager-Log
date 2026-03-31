@@ -6,7 +6,6 @@ searchInput?.addEventListener('input', (e: Event) => {
     const searchTerm = target.value.toLowerCase();
     
     const container = document.getElementById('productContainer');
-    console.log(container);
     if (!container) return;
 
     const productCards = container.querySelectorAll(':scope > div');
