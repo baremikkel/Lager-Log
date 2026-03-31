@@ -5,20 +5,17 @@ class CreateProduct {
     private modalBarcode: HTMLInputElement
     private modalProductName: HTMLInputElement
     private modalUnits: HTMLInputElement
-    private inputBarcode: HTMLInputElement
 
     constructor(
         productForm: HTMLFormElement,
         modalBarcode: HTMLInputElement,
         modalProductName: HTMLInputElement,
-        modalUnits: HTMLInputElement
+        modalUnits: HTMLInputElement,
     ) {
         this.productForm = productForm
         this.modalBarcode = modalBarcode
         this.modalProductName = modalProductName
         this.modalUnits = modalUnits
-        this.inputBarcode = document.getElementById('barcodeInput') as HTMLInputElement
-        this.modalBarcode.value = this.inputBarcode.value
         this.productForm.addEventListener('submit', (e: Event) => {
             this.createProduct(e)
         })

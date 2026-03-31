@@ -22,7 +22,6 @@ class SubmitProduct {
         this.sendListBtn = sendListBtn
 
         this.barcodeForm.addEventListener('submit', (e: Event) => {
-            console.log(products)
             this.addProductToList(e)
         })
 
@@ -58,6 +57,12 @@ class SubmitProduct {
         }
         if (!matched) {
             document.getElementById("addProductModal")?.classList.remove("hidden")
+            const modalBarcode = document.getElementById('modalBarcode') as HTMLInputElement
+            const modalProductName = document.getElementById('modalProductName') as HTMLInputElement
+            if (modalBarcode) {
+                modalBarcode.value = this.barcodeInput.value
+                modalProductName.focus()
+            }
         }
         this.barcodeInput.value = ""
     }
