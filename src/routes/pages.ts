@@ -30,7 +30,6 @@ page_router.get('/products', async (req: Request, res: Response) => {
     
 page_router.get('/fruit_vegetables', async (req: Request, res: Response) => {
     const fruitAndVegetables = await getFruitAndVegetables();
-    console.log(fruitAndVegetables);
     res.render('fruit_vegetables_page', {title: 'Frugt & Grønt', products: fruitAndVegetables});
 });
 
