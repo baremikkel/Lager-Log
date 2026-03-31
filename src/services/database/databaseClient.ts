@@ -208,6 +208,16 @@ async function updateCategory(productNames: string[], categoryNames: string[]) {
     }
 }
 
+async function getFruitAndVegetables(): Promise<Product[]> { 
+  const { rows } = await pool.query(`SELECT p.id, p.product_barcode, p.product_name, inventory.product_amount AS stock
+  FROM products p
+  JOIN product_categories pc ON p.id = pc.product_id
+  JOIN categories c ON pc.category_id = c.id
+  LEFT JOIN inventory ON p.id = inventory.product_id
+  WHERE c.name = $1`, ['Frugt og Grønt']);
+  return rows;
+}
+
 export {
   setupDatabase,
   getAllProducts,
@@ -219,5 +229,6 @@ export {
   getInventory,
   addCategory,
   updateCategory,
+  getFruitAndVegetables,
 };
 export default pool;
