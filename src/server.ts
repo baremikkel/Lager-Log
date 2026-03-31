@@ -14,6 +14,6 @@ app.use('/layouts', express.static(path.join(process.cwd(), 'views', 'layouts'))
 app.use(express.json());
 app.use('/api', api_router);
 app.use('/', page_router);
-app.listen(PORT, () => {
+app.listen(PORT, () => { 
     console.log(`Server active at http://localhost:${PORT}`);
 });
