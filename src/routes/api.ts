@@ -5,7 +5,8 @@ import {
   addToInventory,
   getProductIdByBarcode,
   addCategory,
-  updateCategory
+  updateCategory,
+  updateProduct
 } from "../services/database/databaseClient";
 
 const api_router = Router();
@@ -96,6 +97,20 @@ api_router.post("/products/update", async (req: Request, res: Response) => {
   } catch (error) {
     logger.error(`[Backend] Error updating inventory: ${error}`);
     return res.status(500).json({ error: "Failed to update inventory" });
+  }
+});
+
+api_router.post("/products/edit", async (req: Request, res: Response) => {
+  const { id, product_barcode, product_name, stock } = req.body;
+  if (!id || !product_barcode || !product_name || typeof stock !== 'number') {
+    return res.status(400).json({ error: "id, product_barcode, product_name, and stock are required" });
+  }
+  try {
+    await updateProduct(id, product_barcode, product_name, stock);
+    res.status(200).json({ message: "Product updated successfully!" });
+  } catch (error) {
+    logger.error(`[Backend] Error updating product: ${error}`);
+    return res.status(500).json({ error: "Failed to update product" });
   }
 });
 
