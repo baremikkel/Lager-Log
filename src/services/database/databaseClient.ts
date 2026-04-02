@@ -230,12 +230,21 @@ async function getAllProductsWithCategories() {
 }
 
 async function getFruitAndVegetables(): Promise<Product[]> { 
-  const { rows } = await pool.query(`SELECT p.id, p.product_barcode, p.product_name, p.stock, inventory.product_amount
-  FROM products p
-  JOIN product_categories pc ON p.id = pc.product_id
-  JOIN categories c ON pc.category_id = c.id
-  LEFT JOIN inventory ON p.id = inventory.product_id
-  WHERE c.name = $1`, ['Frugt og Grønt']);
+  const { rows } = await pool.query(`
+    SELECT 
+      p.id, 
+      p.product_barcode, 
+      p.product_name, 
+      p.stock, 
+      inventory.product_amount,
+      COALESCE(json_agg(DISTINCT c.name), '[]'::json) as categories
+    FROM products p
+    JOIN product_categories pc ON p.id = pc.product_id
+    JOIN categories c ON pc.category_id = c.id
+    LEFT JOIN inventory ON p.id = inventory.product_id
+    WHERE c.name = $1
+    GROUP BY p.id, p.product_barcode, p.product_name, p.stock, inventory.product_amount
+  `, ['Frugt og Grønt']);
   return rows;
 }
 
