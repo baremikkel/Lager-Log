@@ -37,7 +37,7 @@ async function setupDatabase() {
 }
 
 async function getAllProducts(): Promise<Product[]> {
-  const { rows } = await pool.query("SELECT * FROM products");
+  const { rows } = await pool.query("SELECT *, inventory.product_amount FROM products LEFT JOIN inventory ON products.id = inventory.product_id");
   return rows;
 }
 
@@ -211,6 +211,24 @@ async function updateCategory(productNames: string[], categoryNames: string[]) {
     }
 }
 
+async function getAllProductsWithCategories() {
+  const { rows } = await pool.query(`
+    SELECT 
+      p.id,
+      p.product_barcode,
+      p.product_name,
+      p.stock,
+      i.product_amount,
+      COALESCE(json_agg(DISTINCT c.name), '[]'::json) as categories
+    FROM products p
+    LEFT JOIN inventory i ON p.id = i.product_id
+    LEFT JOIN product_categories pc ON p.id = pc.product_id
+    LEFT JOIN categories c ON pc.category_id = c.id
+    GROUP BY p.id, p.product_barcode, p.product_name, p.stock, i.product_amount
+  `);
+  return rows;
+}
+
 async function getFruitAndVegetables(): Promise<Product[]> { 
   const { rows } = await pool.query(`SELECT p.id, p.product_barcode, p.product_name, p.stock, inventory.product_amount
   FROM products p
@@ -232,6 +250,7 @@ async function updateProduct(id: number, product_barcode: string, product_name: 
 export {
   setupDatabase,
   getAllProducts,
+  getAllProductsWithCategories,
   getAllCategories,
   getProductByBarcode,
   getProductIdByBarcode,
