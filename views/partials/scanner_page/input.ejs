@@ -1,21 +1,21 @@
 <div
-  class="bg-green-100 p-6 rounded-2xl shadow-sm w-full md:w-1/2"
+  class="bg-green-100 p-3 sm:p-4 md:p-6 rounded-2xl shadow-sm w-full md:w-1/2"
   id="inputPlatform"
   data-products='<%- JSON.stringify(products) %>'>
   <%- include("modal", { products: products }) %>
-  <h1 class="text-2xl font-bold mb-4">Indtast Stregkode eller brug scanner</h1>
-  <div class="flex items-center gap-12">
-    <form class="flex items-center gap-2 w-full" id="barcodeForm">
+  <h1 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">Indtast Stregkode eller brug scanner</h1>
+  <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 md:gap-12">
+    <form class="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 w-full" id="barcodeForm">
       <input
         id="barcodeInput"
         type="text"
         placeholder="Stregkode"
-        class="text-[20px] rounded-lg bg-white border border-gray-300 p-2.25 outline-none w-full"
+        class="text-sm sm:text-base md:text-[20px] rounded-lg bg-white border border-gray-300 p-2 sm:p-2.25 outline-none w-full"
       />
 
       <button
         type="submit"
-        class="bg-sky-600 text-white px-5 py-2.5 rounded-lg hover:bg-sky-700 font-medium text-[20px] whitespace-nowrap"
+        class="bg-sky-600 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.25 md:py-2.5 rounded-lg hover:bg-sky-700 font-medium text-sm sm:text-base md:text-[20px] whitespace-nowrap w-full sm:w-auto"
         id="barcodeButton"
       >
         Tilføj
@@ -23,7 +23,7 @@
     </form>
 
     <button
-      class="bg-green-400 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 font-medium text-[20px] whitespace-nowrap" data-mode="add"
+      class="bg-green-400 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.25 md:py-2.5 rounded-lg hover:bg-green-700 font-medium text-sm sm:text-base md:text-[20px] whitespace-nowrap w-full sm:w-auto" data-mode="add"
       id="modeButton"
     >
       Tilføj Mode
