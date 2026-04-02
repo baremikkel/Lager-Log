@@ -1,42 +1,42 @@
-<div id="editProductModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h5 class="text-xl font-bold text-gray-800">Rediger Produkt</h5>
-                <button type="button" onclick="document.getElementById('editProductModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+<div id="editProductModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all max-h-screen overflow-y-auto">
+        <div class="p-3 sm:p-4 md:p-6">
+            <div class="flex justify-between items-center mb-3 sm:mb-4">
+                <h5 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">Rediger Produkt</h5>
+                <button type="button" onclick="document.getElementById('editProductModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-xl sm:text-2xl">&times;</button>
             </div>
 
             <form id="editProductForm">
                 <input type="hidden" id="editProductId" name="id">
-                <div class="space-y-4">
+                <div class="space-y-3 sm:space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Stregkode</label>
+                        <label class="block text-xs sm:text-sm md:text-base font-medium text-gray-700">Stregkode</label>
                         <input type="text" name="product_barcode" id="editProductBarcode"
-                               class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                               class="mt-1 block w-full border border-gray-300 rounded-md p-1.5 sm:p-2 text-sm sm:text-base focus:ring-blue-500 focus:border-blue-500"
                                required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Produkt Navn</label>
+                        <label class="block text-xs sm:text-sm md:text-base font-medium text-gray-700">Produkt Navn</label>
                         <input type="text" name="product_name" id="editProductName"
-                               class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                               class="mt-1 block w-full border border-gray-300 rounded-md p-1.5 sm:p-2 text-sm sm:text-base focus:ring-blue-500 focus:border-blue-500"
                                required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Antal pr enhed</label>
+                        <label class="block text-xs sm:text-sm md:text-base font-medium text-gray-700">Antal pr enhed</label>
                         <input type="number" name="stock" id="editProductStock"
-                               class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                               class="mt-1 block w-full border border-gray-300 rounded-md p-1.5 sm:p-2 text-sm sm:text-base focus:ring-blue-500 focus:border-blue-500"
                                min="1"
                                required>
                     </div>
                 </div>
 
-                <div class="mt-6 flex justify-end space-x-3">
+                <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-3">
                     <button type="button" onclick="document.getElementById('editProductModal').classList.add('hidden')"
-                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">
+                            class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition w-full sm:w-auto">
                         Annuller
                     </button>
                     <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                            class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base bg-blue-600 text-white rounded-md hover:bg-blue-700 transition w-full sm:w-auto">
                         Gem Ændringer
                     </button>
                 </div>

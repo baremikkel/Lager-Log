@@ -1,13 +1,13 @@
-<div class="relative w-full p-3">
+<div class="relative w-full p-1.5 sm:p-2 md:p-3">
     <button onclick="toggleDropdown('<%- category.id %>')"
-        class="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+        class="inline-flex justify-between items-center w-full px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-medium text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
         <span><%- category.name %></span>
         <div class="flex items-center">
             <span
-                class="mr-2 px-2 py-0.5 text-xs font-bold bg-blue-500 text-blue-50 rounded-full border border-blue-400">
+                class="mr-1 sm:mr-2 px-2 py-0.5 text-xs font-bold bg-blue-500 text-blue-50 rounded-full border border-blue-400">
                 <%= category.products.length %>
             </span>
-            <svg id="arrow-<%- category.id %>" class="w-5 h-5 transform transition-transform duration-200"
+            <svg id="arrow-<%- category.id %>" class="w-4 sm:w-5 h-4 sm:h-5 transform transition-transform duration-200"
                 fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -17,19 +17,19 @@
     </button>
     <div id="dropdownMenu-<%- category.id %>"
     class="absolute z-10 w-full mt-1 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 ease-out origin-top">
-    <div class="p-2 flex flex-wrap gap-2">
+    <div class="p-1 sm:p-2 flex flex-wrap gap-1 sm:gap-2">
         
         <% if (category.products && category.products.length > 0) { %>
             <% category.products.forEach(function(product) { %>
                 <button
                     type="button"
-                    class="inline-block px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all cursor-pointer shadow-sm uncategorized-product"
+                    class="inline-block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm md:text-base font-medium text-blue-700 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all cursor-pointer shadow-sm uncategorized-product"
                     data-product-id="<%- product.id %>">
                     <%- product.name %>
                 </button>
             <% }); %>
         <% } else { %>
-            <p class="w-full px-4 py-2 text-sm text-gray-400 italic">Kategorien har ikke nogen produkter</p>
+            <p class="w-full px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-gray-400 italic">Kategorien har ikke nogen produkter</p>
         <% } %>
 
     </div>
