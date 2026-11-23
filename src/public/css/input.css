@@ -17,3 +17,65 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 }
+
+/* ---------- Camera window ---------- */
+
+/* Keep clear of the notch and the home indicator on phones. */
+.camera-sheet {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.camera-btn {
+  min-height: 3rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  transition: transform 0.1s, filter 0.1s;
+}
+.camera-btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+/* Compact one-line rows for the list while it is shown inside the camera window. */
+#cameraListSlot .item-container {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.375rem 0;
+  padding: 0.375rem 0.5rem 0.375rem 0.75rem;
+  border-radius: 0.75rem;
+}
+#cameraListSlot .product-barcode {
+  display: none;
+}
+#cameraListSlot .product-name {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#cameraListSlot .counter {
+  width: auto;
+  margin-left: 0;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+#cameraListSlot .counter .count {
+  min-width: 2rem;
+  margin: 0;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+#cameraListSlot .counter button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 1.25rem;
+}

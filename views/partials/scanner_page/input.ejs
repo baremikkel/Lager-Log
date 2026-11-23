@@ -3,6 +3,7 @@
   id="inputPlatform"
   data-products='<%- JSON.stringify(products) %>'>
   <%- include("modal", { products: products }) %>
+  <%- include("camera_modal") %>
   <h1 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">Indtast Stregkode eller brug scanner</h1>
   <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 md:gap-12">
     <form class="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 w-full" id="barcodeForm">
@@ -20,6 +21,15 @@
       >
         Tilføj
       </button>
+
+      <button
+        type="button"
+        class="bg-gray-700 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.25 md:py-2.5 rounded-lg hover:bg-gray-800 font-medium text-sm sm:text-base md:text-[20px] whitespace-nowrap w-full sm:w-auto"
+        id="cameraButton"
+        aria-label="Scan stregkode med kamera"
+      >
+        📷 Kamera
+      </button>
     </form>
 
     <button
@@ -34,3 +44,4 @@
 <script src="/js/scanner_page/input/switch.js"></script>
 <script src="/js/scanner_page/submit_product/submitProduct.js"></script>
 <script src="/js/scanner_page/create_product/createNewProduct.js"></script>
+<script src="/js/scanner_page/camera/camera.js"></script>

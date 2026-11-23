@@ -3,6 +3,8 @@ jspm_packages/
 
 dist/
 
+certs/
+
 .env
 .env.local
 .env.*.local
