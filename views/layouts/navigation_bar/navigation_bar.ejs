@@ -1,21 +1,33 @@
 <div class="h-14">
-<nav class="bg-sky-600 fixed top-0 left-0 w-full shadow-md z-50 mb-40">
-  <ul class="flex flex-row gap-2 sm:gap-4 md:gap-6 lg:gap-8 p-2 sm:p-3 md:p-4 flex-wrap md:flex-nowrap text-xs sm:text-sm md:text-base">
-    <li><a href="/" class="hover:underline font-medium">Scanner</a></li>
+<nav class="site-nav bg-sky-600 fixed top-0 left-0 w-full shadow-md z-50">
+  <div class="relative">
+  <ul id="navLinks" class="flex flex-row flex-nowrap overflow-x-auto whitespace-nowrap gap-1 md:gap-6 lg:gap-8 px-1 py-1.5 md:p-4 text-sm md:text-base">
+    <li><a href="/scanner" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Scanner</a></li>
     <li>
-      <a href="/categories" class="hover:underline font-medium">Kategorier</a>
+      <a href="/categories" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Kategorier</a>
     </li>
     <li>
-      <a href="/inventory" class="hover:underline font-medium">Dit Lager</a>
+      <a href="/inventory" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Dit Lager</a>
     </li>
     <li>
-      <a href="/products" class="hover:underline font-medium">Alle Produkter</a>
+      <a href="/products" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Alle Produkter</a>
     </li>
     <li>
-      <a href="/fruit_vegetables" class="hover:underline font-medium"
+      <a href="/fruit_vegetables" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium"
         > Løs Frugt & Grønt</a
       >
     </li>
   </ul>
+  <!-- Edge hints: shown by nav_scroll.ts only when more links are hidden on that side -->
+  <button type="button" id="navScrollLeft" aria-label="Rul navigation til venstre" tabindex="-1"
+    class="nav-scroll-hint hidden absolute inset-y-0 left-0 w-12 items-center justify-start pl-1 bg-gradient-to-r from-sky-600 from-40% to-transparent text-white">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+  </button>
+  <button type="button" id="navScrollRight" aria-label="Rul navigation til højre" tabindex="-1"
+    class="nav-scroll-hint hidden absolute inset-y-0 right-0 w-12 items-center justify-end pr-1 bg-gradient-to-l from-sky-600 from-40% to-transparent text-white">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+  </button>
+  </div>
 </nav>
 </div>
+<script src="/js/layouts/nav_scroll.js"></script>

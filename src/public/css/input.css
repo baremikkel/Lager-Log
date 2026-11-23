@@ -18,6 +18,47 @@
   --breakpoint-2xl: 1536px;
 }
 
+/* ---------- Phone usability ---------- */
+
+/* No double-tap zoom delay on buttons; no accidental text selection when tapping fast. */
+button {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (max-width: 767px) {
+  /* iOS zooms into inputs with a font smaller than 16px when they get focus. */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Bigger +/- buttons in the scanned list so they are easy to hit with a thumb. */
+  #scannedProductsContainer .counter button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* Navigation: respect the notch, hide the scrollbar on the swipeable link row. */
+.site-nav {
+  padding-top: env(safe-area-inset-top);
+}
+.site-nav ul {
+  scrollbar-width: none;
+}
+.site-nav ul::-webkit-scrollbar {
+  display: none;
+}
+
+/* Pop-up forms slide up from the bottom on phones; keep buttons above the home indicator. */
+.modal-sheet {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* ---------- Camera window ---------- */
 
 /* Keep clear of the notch and the home indicator on phones. */
