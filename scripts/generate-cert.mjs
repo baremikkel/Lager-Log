@@ -1,6 +1,6 @@
 // Generates a self-signed certificate for local-network HTTPS (needed for camera access on other devices).
 import { execFileSync } from 'node:child_process';
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { networkInterfaces } from 'node:os';
 
 const lanIps = Object.values(networkInterfaces())
@@ -10,8 +10,30 @@ const lanIps = Object.values(networkInterfaces())
 
 const altNames = ['DNS:localhost', 'IP:127.0.0.1', ...lanIps.map((ip) => `IP:${ip}`)].join(',');
 
+// On Windows, OpenSSL is usually not on PATH but ships with Git for Windows.
+function findOpenssl() {
+  const candidates = ['openssl'];
+  if (process.platform === 'win32') {
+    candidates.push(
+      'C:\\Program Files\\Git\\usr\\bin\\openssl.exe',
+      'C:\\Program Files\\Git\\mingw64\\bin\\openssl.exe',
+    );
+  }
+  for (const candidate of candidates) {
+    if (candidate !== 'openssl' && !existsSync(candidate)) continue;
+    try {
+      execFileSync(candidate, ['version'], { stdio: 'ignore' });
+      return candidate;
+    } catch {
+      // try the next one
+    }
+  }
+  console.error('OpenSSL was not found. On Windows, install Git for Windows (includes OpenSSL) or OpenSSL itself.');
+  process.exit(1);
+}
+
 mkdirSync('certs', { recursive: true });
-execFileSync('openssl', [
+execFileSync(findOpenssl(), [
   'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-sha256', '-days', '825',
   '-keyout', 'certs/key.pem',
   '-out', 'certs/cert.pem',
