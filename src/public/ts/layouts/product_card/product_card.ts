@@ -1,28 +1,25 @@
 import { openEditModal } from "./edit_products";
 import { renderStock, togglePackages } from "./_stock_display";
+import { addPendingChange, hasPendingPanel, setupPendingChanges } from "./_pending_changes";
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.increase-btn').forEach((btn: Element) => {
-        btn.addEventListener('click', async (event: Event) => {
-            event.preventDefault();
-            const button = event.target as HTMLButtonElement;
-            const productId = button.getAttribute('data-product-id');
-            if (productId) {
-                await updateInventory(parseInt(productId), 1, button);
-            }
-        });
-    });
+    setupPendingChanges();
 
-    document.querySelectorAll('.decrease-btn').forEach((btn: Element) => {
-        btn.addEventListener('click', async (event: Event) => {
-            event.preventDefault();
-            const button = event.target as HTMLButtonElement;
-            const productId = button.getAttribute('data-product-id');
-            if (productId) {
-                await updateInventory(parseInt(productId), -1, button);
-            }
+    const wireStepButtons = (selector: string, step: number) => {
+        document.querySelectorAll(selector).forEach((btn: Element) => {
+            btn.addEventListener('click', async (event: Event) => {
+                event.preventDefault();
+                const button = event.currentTarget as HTMLButtonElement;
+                const productId = button.getAttribute('data-product-id');
+                if (!productId) return;
+                // Pages with an approval list collect changes instead of saving them.
+                if (hasPendingPanel()) addPendingChange(productId, step);
+                else await updateInventory(parseInt(productId), step, button);
+            });
         });
-    });
+    };
+    wireStepButtons('.increase-btn', 1);
+    wireStepButtons('.decrease-btn', -1);
 
     document.querySelectorAll('.stock-toggle').forEach((toggle: Element) => {
         toggle.addEventListener('click', (event: Event) => {

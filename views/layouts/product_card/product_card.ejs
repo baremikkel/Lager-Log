@@ -29,6 +29,7 @@
                         <div class="flex flex-col min-w-0">
                             <button type="button" class="stock-toggle text-left text-sm md:text-xs text-slate-700 leading-tight <%= packageText ? 'cursor-pointer underline decoration-dotted underline-offset-2 hover:text-sky-700' : 'cursor-default' %>" title="Vis antal pakker">
                                 <span class="font-bold product-amount"><%= amount %></span> stk på lager
+                                <span class="inline-block font-bold pending-badge hidden"></span>
                             </button>
                             <p class="text-[11px] md:text-[10px] text-slate-500 truncate leading-tight package-display hidden"><%= packageText %></p>
                             <p class="text-[11px] md:text-[10px] text-slate-400 truncate italic product-per-package"><%= perPackage %> stk pr pakke</p>
