@@ -1,3 +1,5 @@
+import { renderStock } from "./_stock_display";
+
 function openEditModal(productId: string) {
     const modal = document.getElementById('editProductModal') as HTMLElement;
     const card = document.getElementById(`product_card_${productId}`) as HTMLElement;
@@ -6,7 +8,7 @@ function openEditModal(productId: string) {
 
     const productName = card.querySelector('#product_name')?.textContent?.trim() || '';
     const barcode = card.querySelector('#product_barcode')?.textContent?.trim() || '';
-    const stock = card.getAttribute('#data-stock') || '1';
+    const stock = card.dataset.stock || '1';
 
     (document.getElementById('editProductId') as HTMLInputElement).value = productId;
     (document.getElementById('editProductName') as HTMLInputElement).value = productName;
@@ -66,31 +68,15 @@ function updateProductCard(data: { id: number; product_barcode: string; product_
     const card = document.getElementById(`product_card_${data.id}`) as HTMLElement;
     if (!card) return;
 
-    card.setAttribute('data-stock', data.stock.toString());
-    
+    card.dataset.stock = data.stock.toString();
+
     const nameEl = card.querySelector('h3');
     if (nameEl) nameEl.textContent = data.product_name;
-    
+
     const barcodeEl = card.querySelector('.text-slate-600.font-mono');
     if (barcodeEl) barcodeEl.textContent = data.product_barcode;
-    
-    const stockEl = card.querySelector('.text-slate-600.truncate.leading-tight');
-    if (stockEl && stockEl.textContent) {
-        const parts = stockEl.textContent.split(' ');
-        if (parts.length >= 1) {
-            parts[0] = data.stock.toString();
-            stockEl.textContent = parts.join(' ');
-        }
-    }
 
-    const amountEl = card.querySelector('.product-amount') as HTMLElement;
-    if (amountEl) {
-        const currentAmount = parseInt(amountEl.textContent?.trim() || '0');
-        const totalEl = card.querySelector('.total-display') as HTMLElement;
-        if (totalEl) {
-            totalEl.textContent = `(${data.stock * currentAmount} stk på lager)`;
-        }
-    }
+    renderStock(card);
 }
 
 export { openEditModal };

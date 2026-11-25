@@ -31,12 +31,14 @@ api_router.post("/scanner/list", async (req: Request, res: Response) => {
   const list = req.body;
   logger.info(`[Backend] Received list: ${JSON.stringify(list)}`);
   try {
-    req.body.forEach(async (item: any) => {
-    const { barcode, count } = item;
-    const product = await getProductIdByBarcode(barcode);
-    await addToInventory(product.id, count);
-  });
-  res.status(200).json({ message: "List received successfully!" });
+    // Each scan is one package, so add count × pieces per package to the inventory.
+    for (const { barcode, count } of list) {
+      const product = await getProductIdByBarcode(barcode);
+      if (!product) continue;
+      const perPackage = Number(product.stock) || 1;
+      await addToInventory(product.id, Number(count) * perPackage);
+    }
+    res.status(200).json({ message: "List received successfully!" });
   } catch (error) {
     logger.error(`[Backend] Error processing list: ${error}`);
     return res.status(500).json({ error: "Failed to process list" });

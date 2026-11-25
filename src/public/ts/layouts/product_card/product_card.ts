@@ -1,4 +1,5 @@
 import { openEditModal } from "./edit_products";
+import { renderStock, togglePackages } from "./_stock_display";
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.increase-btn').forEach((btn: Element) => {
@@ -23,9 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('.stock-toggle').forEach((toggle: Element) => {
+        toggle.addEventListener('click', (event: Event) => {
+            event.stopPropagation();
+            const card = toggle.closest('.card') as HTMLElement | null;
+            if (card) togglePackages(card);
+        });
+    });
+
     document.querySelectorAll('.bg-white').forEach((card: Element) => {
         card.addEventListener('click', (event: Event) => {
-            if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+            if ((event.target as HTMLElement).closest('button')) return;
             
             const productCard = card as HTMLElement;
             const productId = productCard.id.replace('product_card_', '');
@@ -47,19 +56,9 @@ async function updateInventory(productId: number, delta: number, btn: HTMLButton
             const card = btn.closest('#product_card_' + productId) as HTMLElement;
             if (!card) return;
 
-            const amountEl = card.querySelector('.product-amount') as HTMLElement;
-            if (!amountEl) return;
-
-            let currentAmount = parseInt(amountEl.textContent?.trim() || '0');
-            currentAmount += delta;
-            if (currentAmount < 0) currentAmount = 0;
-            amountEl.textContent = currentAmount.toString();
-
-            const totalEl = card.querySelector('.total-display') as HTMLElement;
-            if (!totalEl) return;
-
-            const stock = parseInt(card.getAttribute('data-stock') || '0');
-            totalEl.textContent = `(${stock * currentAmount} stk på lager)`;
+            const currentAmount = Math.max(0, parseInt(card.dataset.amount || '0') + delta);
+            card.dataset.amount = currentAmount.toString();
+            renderStock(card);
         } else {
             alert('Failed to update inventory');
         }

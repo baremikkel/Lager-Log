@@ -2,8 +2,15 @@
     <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4"><%= title %></h2>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
-        <% products.forEach(product => { %>
-            <div class="bg-white p-2 sm:p-3 rounded-lg shadow-sm border border-sky-200 hover:border-sky-400 transition-all flex flex-col min-w-0 card" id="product_card_<%= product.id %>" data-stock="<%= product.stock %>" data-categories="<%= JSON.stringify(product.categories || []) %>">
+        <% products.forEach(product => {
+            const perPackage = Number(product.stock) || 1;
+            const amount = Number(product.product_amount) || 0;
+            const fullPackages = Math.floor(amount / perPackage);
+            const loose = amount % perPackage;
+            const packageText = perPackage <= 1 ? '' :
+                `= ${fullPackages} ${fullPackages === 1 ? 'pakke' : 'pakker'} à ${perPackage}` + (loose > 0 ? ` + ${loose} løse` : '');
+        %>
+            <div class="bg-white p-2 sm:p-3 rounded-lg shadow-sm border border-sky-200 hover:border-sky-400 transition-all flex flex-col min-w-0 card" id="product_card_<%= product.id %>" data-stock="<%= perPackage %>" data-amount="<%= amount %>" data-categories="<%= JSON.stringify(product.categories || []) %>">
                 <h3 class="text-sm md:text-[15px] font-bold text-slate-800 mb-1 leading-tight truncate" title="Produkt navn" id="product_name">
                     <%= product.product_name %>
                 </h3>
@@ -20,20 +27,11 @@
                     
                     <div class="flex flex-row items-center gap-0.5 sm:gap-1.5">
                         <div class="flex flex-col min-w-0">
-                            <div class="flex flex-row flex-wrap gap-x-1 text-xs md:text-[11px]">
-                                <p class="text-slate-600 truncate leading-tight" id="product_stock">
-                                    <%= product.stock | 0%>
-                                </p>
-                                <p class="text-slate-600 truncate leading-tight">pr enhed</p>
-                                <p class="text-slate-600 truncate leading-tight product-amount" id="product_amount">
-                                    <%= product.product_amount | 0 %>
-                                </p>
-                                <p class="text-slate-600 truncate leading-tight">enheder</p>
-                            </div>
-                            
-                            <p class="text-[11px] md:text-[10px] text-slate-400 truncate italic total-display">
-                                 (<%= product.stock * product.product_amount | 0 %> stk på lager)
-                            </p>
+                            <button type="button" class="stock-toggle text-left text-sm md:text-xs text-slate-700 leading-tight <%= packageText ? 'cursor-pointer underline decoration-dotted underline-offset-2 hover:text-sky-700' : 'cursor-default' %>" title="Vis antal pakker">
+                                <span class="font-bold product-amount"><%= amount %></span> stk på lager
+                            </button>
+                            <p class="text-[11px] md:text-[10px] text-slate-500 truncate leading-tight package-display hidden"><%= packageText %></p>
+                            <p class="text-[11px] md:text-[10px] text-slate-400 truncate italic product-per-package"><%= perPackage %> stk pr pakke</p>
                         </div>
                     </div>
                         <div class="flex gap-2 md:gap-1 mt-1">

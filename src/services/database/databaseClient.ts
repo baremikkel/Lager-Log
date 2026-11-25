@@ -95,7 +95,7 @@ async function getProductIdByBarcode(
   product_barcode: string,
 ): Promise<Product> {
   const { rows } = await pool.query(
-    "SELECT id FROM products WHERE product_barcode = $1",
+    "SELECT id, stock FROM products WHERE product_barcode = $1",
     [product_barcode],
   );
   return rows[0];
