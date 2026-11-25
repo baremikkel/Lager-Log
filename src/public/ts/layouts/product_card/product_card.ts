@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function updateInventory(productId: number, delta: number, btn: HTMLButtonElement): Promise<void> {
     try {
-        const response = await fetch('api' + window.location.pathname + '/update', {
+        // Same endpoint on every page (category pages live under /category/:id).
+        const response = await fetch('/api/inventory/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

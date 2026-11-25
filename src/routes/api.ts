@@ -6,7 +6,8 @@ import {
   getProductIdByBarcode,
   addCategory,
   updateCategory,
-  updateProduct
+  updateProduct,
+  saveNavSettings
 } from "../services/database/databaseClient";
 
 const api_router = Router();
@@ -129,6 +130,24 @@ api_router.post("/fruit_vegetables/update", async (req: Request, res: Response) 
   } catch (error) {
     logger.error(`[Backend] Error updating inventory: ${error}`);
     return res.status(500).json({ error: "Failed to update inventory" });
+  }
+});
+
+// Settings page: which categories are shown in the navigation bar, in order.
+api_router.post("/settings/nav", async (req: Request, res: Response) => {
+  const categories = req.body?.categories;
+  const valid =
+    Array.isArray(categories) &&
+    categories.every((c: any) => Number.isInteger(c?.id) && typeof c?.show_in_nav === "boolean");
+  if (!valid) {
+    return res.status(400).json({ error: "categories must be a list of { id, show_in_nav }" });
+  }
+  try {
+    await saveNavSettings(categories);
+    res.status(200).json({ message: "Settings saved" });
+  } catch (error) {
+    logger.error(`[Backend] Error saving navigation settings: ${error}`);
+    return res.status(500).json({ error: "Failed to save settings" });
   }
 });
 

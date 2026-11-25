@@ -5,7 +5,7 @@ import https from 'https';
 import path from 'path';
 import {page_router} from './routes/pages';
 import {api_router} from './routes/api';
-import { setupDatabase } from './services/database/databaseClient';
+import { getNavCategories, setupDatabase } from './services/database/databaseClient';
 
 const app = express();
 const PORT = 3000;
@@ -18,6 +18,16 @@ app.use('/images', express.static(path.join(process.cwd(), 'src', 'public', 'ima
 app.use('/layouts', express.static(path.join(process.cwd(), 'views', 'layouts')));
 app.use(express.json());
 app.use('/api', api_router);
+// Every page's navigation bar shows the categories chosen on the settings page.
+app.use(async (req, res, next) => {
+    try {
+        res.locals.navCategories = await getNavCategories();
+    } catch (error) {
+        console.error('Could not load navigation categories:', error);
+        res.locals.navCategories = [];
+    }
+    next();
+});
 app.use('/', page_router);
 app.listen(PORT, () => {
     console.log(`Server active at http://localhost:${PORT}`);

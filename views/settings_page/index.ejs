@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../layouts/header') %>
+  <body class="bg-sky-200 flex flex-col items-center gap-4 sm:gap-6 md:gap-8 my-4 sm:my-6 md:my-10 px-2 sm:px-3 md:px-4">
+    <%- include('../layouts/navigation_bar/navigation_bar') %>
+
+    <div class="bg-white p-3 sm:p-4 md:p-6 rounded-2xl shadow-sm w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
+      <h1 class="text-lg sm:text-xl md:text-2xl font-bold mb-1">Indstillinger</h1>
+      <h2 class="text-base sm:text-lg font-semibold mt-4">Kategorier i navigationsbaren</h2>
+      <p class="text-sm text-slate-600 mb-3">
+        Sæt flueben ved de kategorier, der skal have deres egen side i menuen øverst. Brug pilene til at bestemme rækkefølgen.
+      </p>
+
+      <% if (categories.length === 0) { %>
+        <p class="text-sm text-slate-500 bg-slate-50 rounded-lg p-3">
+          Der er ingen kategorier endnu. Opret dem på siden <a href="/categories" class="text-sky-700 underline">Kategorier</a>.
+        </p>
+      <% } else { %>
+        <ul id="navCategoryList" class="divide-y divide-slate-100 border border-slate-200 rounded-lg">
+          <% categories.forEach(category => { %>
+            <li class="flex items-center gap-2 px-3 py-2 nav-category" data-id="<%= category.id %>">
+              <label class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer select-none py-1">
+                <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 nav-category-show" <%= category.show_in_nav ? 'checked' : '' %>>
+                <span class="truncate text-base"><%= category.name %></span>
+              </label>
+              <button type="button" class="w-10 h-10 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent nav-category-up" aria-label="Flyt <%= category.name %> op">▲</button>
+              <button type="button" class="w-10 h-10 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent nav-category-down" aria-label="Flyt <%= category.name %> ned">▼</button>
+            </li>
+          <% }) %>
+        </ul>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-4">
+          <button type="button" id="saveNavSettings" class="bg-sky-600 text-white px-5 py-3 md:py-2.5 rounded-lg hover:bg-sky-700 font-medium text-base w-full sm:w-auto disabled:opacity-50">
+            Gem
+          </button>
+          <p id="navSettingsStatus" class="text-sm" role="status"></p>
+        </div>
+      <% } %>
+    </div>
+
+    <script src="/js/settings_page/settings.js"></script>
+  </body>
+</html>

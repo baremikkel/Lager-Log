@@ -40,3 +40,19 @@ CREATE TABLE IF NOT EXISTS product_categories (
 INSERT INTO categories (name) 
 VALUES ('Ukategoriseret'),('Frugt og Grønt'), ('Mejeri'), ('Kød og Fisk')
 ON CONFLICT (name) DO NOTHING;
+
+-- Which categories get their own link in the navigation bar, and in which order
+-- (chosen on the "Indstillinger" page). The first time the columns are added,
+-- "Frugt og Grønt" is shown so the navigation looks like it did before.
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'categories' AND column_name = 'show_in_nav'
+    ) THEN
+        ALTER TABLE categories ADD COLUMN show_in_nav BOOLEAN NOT NULL DEFAULT false;
+        UPDATE categories SET show_in_nav = true WHERE name = 'Frugt og Grønt';
+    END IF;
+END $$;
+
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS nav_position INTEGER;

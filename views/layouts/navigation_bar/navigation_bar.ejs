@@ -12,10 +12,14 @@
     <li>
       <a href="/products" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Alle Produkter</a>
     </li>
+    <%# Categories chosen on the settings page (loaded for every page in server.ts) %>
+    <% (locals.navCategories || []).forEach(category => { %>
     <li>
-      <a href="/fruit_vegetables" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium"
-        > Løs Frugt & Grønt</a
-      >
+      <a href="/category/<%= category.id %>" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium"><%= category.name %></a>
+    </li>
+    <% }) %>
+    <li>
+      <a href="/settings" class="block px-3 py-2 md:p-0 rounded-md active:bg-sky-700 hover:underline font-medium">Indstillinger</a>
     </li>
   </ul>
   <!-- Edge hints: shown by nav_scroll.ts only when more links are hidden on that side -->
