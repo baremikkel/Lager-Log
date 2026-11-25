@@ -101,27 +101,37 @@ async function getProductIdByBarcode(
   return rows[0];
 }
 
+/**
+ * Creates a product in the "Ukategoriseret" category. When `barcode` is null the
+ * product has no barcode, and its own id is used as product_barcode instead.
+ */
 async function addNewProduct(
-  barcode: string,
+  barcode: string | null,
   title: string,
   stock: number,
-) {
+): Promise<{ id: number; product_barcode: string }> {
   const conn = await pool.connect();
-  let newProductId = 0;
   try {
     await conn.query("BEGIN");
-    const result = await conn.query("INSERT INTO products (product_barcode, product_name, stock) VALUES ($1, $2, $3) RETURNING id", [barcode, title, stock]);
-    newProductId = result.rows[0].id;
+    // Reserve the id first so it can also be used as the barcode in the same insert.
+    const result = await conn.query(
+      `WITH next AS (SELECT nextval(pg_get_serial_sequence('products', 'id')) AS id)
+       INSERT INTO products (id, product_barcode, product_name, stock)
+       SELECT id, COALESCE($1, id::text), $2, $3 FROM next
+       RETURNING id, product_barcode`,
+      [barcode, title, stock],
+    );
+    const created = result.rows[0];
 
-    await conn.query("INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2)", [newProductId, 1]);
+    await conn.query("INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2)", [created.id, 1]);
 
-  await conn.query("COMMIT");
+    await conn.query("COMMIT");
+    return created;
   } catch (e) {
     await conn.query("ROLLBACK");
     throw e;
   } finally {
     conn.release();
-    return newProductId;
   }
 }
 

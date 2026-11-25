@@ -12,15 +12,17 @@ import {
 const api_router = Router();
 
 api_router.post("/scanner", async (req: Request, res: Response) => {
-  const barcode = req.body.product_barcode;
+  // has_barcode: false means the product has no barcode; its id is used instead.
+  const hasBarcode = req.body.has_barcode !== false;
+  const barcode = hasBarcode ? String(req.body.product_barcode ?? "").trim() : null;
   const product_name = req.body.product_name;
   const units_per_item = req.body.units_per_item;
-  if (!barcode) {
+  if (hasBarcode && !barcode) {
     return res.status(400).json({ error: "Item code is required" });
   }
   try {
-    const newProductId = await addNewProduct(barcode, product_name, units_per_item);
-    res.status(200).json({ message: "Item added successfully!", id: newProductId });
+    const created = await addNewProduct(barcode, product_name, units_per_item);
+    res.status(200).json({ message: "Item added successfully!", id: created.id, product_barcode: created.product_barcode });
   } catch (error) {
     logger.error(`[Backend] Error adding new item: ${error}`);
     return res.status(500).json({ error: "Failed to add new item" });

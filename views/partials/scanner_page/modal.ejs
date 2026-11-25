@@ -9,11 +9,19 @@
             <form id="addProductForm">
                 <div class="space-y-3 sm:space-y-4">
                     <p class="text-xs sm:text-sm md:text-base text-gray-600">Det ligner ikke at denne varer er i databasen venligst tilføj den i formularen.</p>
-                        <div>
+                        <label class="flex items-center gap-2 text-sm sm:text-base font-medium text-gray-700 cursor-pointer select-none">
+                            <input type="checkbox" name="has_barcode" id="modalHasBarcode" checked
+                                   class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            Varen har en stregkode
+                        </label>
+                        <div id="modalBarcodeField">
                             <label class="block text-xs sm:text-sm md:text-base font-medium text-gray-700">Stregkode</label>
-                            <input type="text" name="barcode" id="modalBarcode"
+                            <input type="text" name="barcode" id="modalBarcode" required
                                    class="mt-1 block w-full border border-gray-300 rounded-md p-2.5 md:p-2 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
+                        <p id="modalNoBarcodeHint" class="hidden text-xs sm:text-sm text-gray-500 bg-gray-50 rounded-md p-2">
+                            Varen får tildelt et nummer, som bruges i stedet for en stregkode. Du kan se nummeret på varen bagefter.
+                        </p>
                         <div>
                             <label class="block text-xs sm:text-sm md:text-base font-medium text-gray-700">Produkt Navn</label>
                             <input type="text" name="name" id="modalProductName"

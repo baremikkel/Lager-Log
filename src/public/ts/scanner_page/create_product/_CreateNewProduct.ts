@@ -5,6 +5,7 @@ class CreateProduct {
     private modalBarcode: HTMLInputElement
     private modalProductName: HTMLInputElement
     private modalUnits: HTMLInputElement
+    private modalHasBarcode: HTMLInputElement | null
 
     constructor(
         productForm: HTMLFormElement,
@@ -16,20 +17,41 @@ class CreateProduct {
         this.modalBarcode = modalBarcode
         this.modalProductName = modalProductName
         this.modalUnits = modalUnits
+        this.modalHasBarcode = document.getElementById('modalHasBarcode') as HTMLInputElement | null
+
         this.productForm.addEventListener('submit', (e: Event) => {
             this.createProduct(e)
         })
+        this.modalHasBarcode?.addEventListener('change', () => this.updateBarcodeField())
+        // form.reset() re-checks the box, so show the barcode field again afterwards.
+        this.productForm.addEventListener('reset', () => setTimeout(() => this.updateBarcodeField()))
+        this.updateBarcodeField()
+    }
+
+    private hasBarcode(): boolean {
+        return this.modalHasBarcode?.checked ?? true
+    }
+
+    /** Products without a barcode get their id as barcode, so the barcode field is hidden. */
+    private updateBarcodeField() {
+        const hasBarcode = this.hasBarcode()
+        document.getElementById('modalBarcodeField')?.classList.toggle('hidden', !hasBarcode)
+        document.getElementById('modalNoBarcodeHint')?.classList.toggle('hidden', hasBarcode)
+        this.modalBarcode.disabled = !hasBarcode
+        this.modalBarcode.required = hasBarcode
     }
 
     private async createProduct(e: Event) {
         e.preventDefault()
         const newProduct = {
-            product_barcode: this.modalBarcode.value,
+            has_barcode: this.hasBarcode(),
+            product_barcode: this.hasBarcode() ? this.modalBarcode.value.trim() : '',
             product_name: this.modalProductName.value,
             units_per_item: parseInt(this.modalUnits.value),
         }
         const createdProduct = await this.saveProductPostRequest(newProduct)
         if (!createdProduct) {
+            alert('Produktet kunne ikke gemmes. Findes stregkoden allerede?')
             return;
         }
         this.productForm.reset()
@@ -51,11 +73,12 @@ class CreateProduct {
             return null;
         }
         if (!response?.ok) {
-            console.error('No response received from server.');
+            console.error('Saving product failed:', response?.status);
             return null;
         }
-        const { id } = await response.json()
-        return { ...newProduct, id }
+        // The server decides the final barcode (the product id when it has none).
+        const { id, product_barcode } = await response.json()
+        return { ...newProduct, id, product_barcode }
     }
 }
 
