@@ -9,7 +9,7 @@
 // Uses only Node's built-in modules so it works before `npm install`.
 
 import { spawn, spawnSync } from 'node:child_process';
-import { copyFileSync, createReadStream, existsSync, readFileSync } from 'node:fs';
+import { copyFileSync, createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -139,7 +139,15 @@ if (!skipDocker) {
 }
 
 // 4. Dependencies ---------------------------------------------------------------
-if (!existsSync('node_modules')) {
+// Also reinstall when package.json/package-lock.json changed after the last install
+// (e.g. after a git pull that added packages), otherwise new imports fail to build.
+const installMarker = path.join('node_modules', '.package-lock.json');
+const dependenciesChanged =
+  !existsSync(installMarker) ||
+  ['package.json', 'package-lock.json'].some(
+    (file) => existsSync(file) && statSync(file).mtimeMs > statSync(installMarker).mtimeMs,
+  );
+if (dependenciesChanged) {
   step('Installing dependencies (npm install), this takes a while the first time');
   if (!run('npm', ['install'])) fail('npm install failed.');
 }
