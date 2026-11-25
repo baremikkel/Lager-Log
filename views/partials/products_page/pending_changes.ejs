@@ -1,16 +1,28 @@
-<%# Changes from +/- on "Alle Produkter" wait here until they are approved. %>
+<%# Changes from +/- on "Alle Produkter" wait here until they are approved.
+    The panel is docked at the bottom, collapsed to a bar; clicking the bar opens it. %>
 <div
   id="pendingChanges"
-  class="hidden fixed z-40 bottom-0 inset-x-0 sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-96 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl border border-sky-200 p-3 sm:p-4"
+  class="fixed z-40 bottom-0 inset-x-0 sm:inset-x-auto sm:right-4 sm:w-96 bg-white rounded-t-2xl shadow-xl border border-b-0 border-sky-200"
 >
-  <div class="flex justify-between items-center mb-2">
-    <h2 class="text-base sm:text-lg font-bold">Ændringer der venter</h2>
-    <span id="pendingCount" class="text-xs text-slate-500"></span>
-  </div>
-  <ul id="pendingList" class="max-h-48 overflow-y-auto divide-y divide-slate-100 text-sm"></ul>
-  <div class="flex gap-2 mt-3">
-    <button type="button" id="pendingApprove" class="flex-1 bg-sky-600 text-white rounded-lg py-2.5 font-medium hover:bg-sky-700 disabled:opacity-50">Godkend</button>
-    <button type="button" id="pendingCancel" class="flex-1 bg-gray-200 text-gray-800 rounded-lg py-2.5 font-medium hover:bg-gray-300">Annuller</button>
+  <button
+    type="button"
+    id="pendingToggle"
+    class="w-full flex items-center gap-2 px-3 sm:px-4 py-3 text-left"
+    aria-expanded="false"
+    aria-controls="pendingBody"
+  >
+    <span class="text-base sm:text-lg font-bold flex-1">Ændringer der venter</span>
+    <span id="pendingCount" class="min-w-6 text-center text-xs font-bold rounded-full px-2 py-0.5 bg-slate-200 text-slate-600">0</span>
+    <span id="pendingChevron" class="inline-block text-slate-500 transition-transform" aria-hidden="true">▲</span>
+  </button>
+
+  <div id="pendingBody" class="hidden px-3 sm:px-4 pb-3 sm:pb-4">
+    <p id="pendingEmpty" class="text-sm text-slate-500 py-2">Tryk + eller − på et produkt for at lave en ændring.</p>
+    <ul id="pendingList" class="max-h-48 overflow-y-auto divide-y divide-slate-100 text-sm"></ul>
+    <div class="flex gap-2 mt-3">
+      <button type="button" id="pendingApprove" class="flex-1 bg-sky-600 text-white rounded-lg py-2.5 font-medium hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed">Godkend</button>
+      <button type="button" id="pendingCancel" class="flex-1 bg-gray-200 text-gray-800 rounded-lg py-2.5 font-medium hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">Annuller</button>
+    </div>
   </div>
 </div>
 
@@ -22,3 +34,16 @@
     <button type="button" class="text-slate-400 hover:text-red-600 px-1 pending-remove" title="Fjern ændring" aria-label="Fjern ændring">✕</button>
   </li>
 </template>
+
+<%# Asked when leaving the page through a link while changes are not saved. %>
+<div id="leaveDialog" class="hidden fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="leaveDialogTitle">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-4 sm:p-5">
+    <h2 id="leaveDialogTitle" class="text-lg font-bold mb-1">Gem ændringerne?</h2>
+    <p class="text-sm text-slate-600 mb-4">Du har <span id="leaveDialogCount"></span> der ikke er gemt. Vil du gemme, før du går?</p>
+    <div class="flex flex-col gap-2">
+      <button type="button" id="leaveSave" class="bg-sky-600 text-white rounded-lg py-2.5 font-medium hover:bg-sky-700 disabled:opacity-50">Gem og gå videre</button>
+      <button type="button" id="leaveDiscard" class="bg-red-100 text-red-700 rounded-lg py-2.5 font-medium hover:bg-red-200">Gå videre uden at gemme</button>
+      <button type="button" id="leaveStay" class="bg-gray-200 text-gray-800 rounded-lg py-2.5 font-medium hover:bg-gray-300">Bliv på siden</button>
+    </div>
+  </div>
+</div>
