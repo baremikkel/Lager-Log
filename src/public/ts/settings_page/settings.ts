@@ -1,7 +1,38 @@
 // Settings page: choose which categories get a link in the navigation bar, and their order.
 
+// Display settings (e.g. barcode on product cards) are saved as soon as they are changed.
 document.addEventListener('DOMContentLoaded', () => {
-    const list = document.getElementById('navCategoryList') as HTMLUListElement | null;
+    const checkbox = document.getElementById('showBarcodeOnCards') as HTMLInputElement | null;
+    const status = document.getElementById('displaySettingsStatus') as HTMLElement | null;
+    if (!checkbox || !status) return;
+
+    checkbox.addEventListener('change', async () => {
+        const wanted = checkbox.checked;
+        checkbox.disabled = true;
+        status.className = 'text-sm text-slate-500';
+        status.textContent = 'Gemmer...';
+        try {
+            const response = await fetch('/api/settings/display', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ showBarcodeOnCards: wanted }),
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            status.className = 'text-sm text-green-700';
+            status.textContent = 'Gemt';
+        } catch (error) {
+            console.error('Error saving display settings:', error);
+            checkbox.checked = !wanted;
+            status.className = 'text-sm text-red-700';
+            status.textContent = 'Kunne ikke gemmes. Prøv igen.';
+        } finally {
+            checkbox.disabled = false;
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const list =document.getElementById('navCategoryList') as HTMLUListElement | null;
     const saveButton = document.getElementById('saveNavSettings') as HTMLButtonElement | null;
     const status = document.getElementById('navSettingsStatus') as HTMLElement | null;
     if (!list || !saveButton || !status) return;

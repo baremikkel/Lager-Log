@@ -56,3 +56,13 @@ BEGIN
 END $$;
 
 ALTER TABLE categories ADD COLUMN IF NOT EXISTS nav_position INTEGER;
+
+-- Simple app-wide settings chosen on the "Indstillinger" page (one row per setting).
+CREATE TABLE IF NOT EXISTS app_settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+INSERT INTO app_settings (key, value)
+VALUES ('show_barcode_on_cards', 'true')
+ON CONFLICT (key) DO NOTHING;

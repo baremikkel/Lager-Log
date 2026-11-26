@@ -278,6 +278,29 @@ async function saveNavSettings(categories: { id: number; show_in_nav: boolean }[
   }
 }
 
+export interface AppSettings {
+  showBarcodeOnCards: boolean;
+}
+
+/** App-wide settings from the "Indstillinger" page, with defaults for anything not saved yet. */
+async function getAppSettings(): Promise<AppSettings> {
+  const { rows } = await pool.query("SELECT key, value FROM app_settings");
+  const values = new Map<string, string>(rows.map((row) => [row.key, row.value]));
+  return {
+    showBarcodeOnCards: values.get("show_barcode_on_cards") !== "false",
+  };
+}
+
+async function saveAppSettings(settings: Partial<AppSettings>) {
+  if (settings.showBarcodeOnCards !== undefined) {
+    await pool.query(
+      `INSERT INTO app_settings (key, value) VALUES ('show_barcode_on_cards', $1)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [String(settings.showBarcodeOnCards)],
+    );
+  }
+}
+
 async function getCategoryById(id: number): Promise<{ id: number; name: string } | null> {
   const { rows } = await pool.query("SELECT id, name FROM categories WHERE id = $1", [id]);
   return rows[0] ?? null;
@@ -331,6 +354,8 @@ export {
   getNavSettings,
   getNavCategories,
   saveNavSettings,
+  getAppSettings,
+  saveAppSettings,
   getCategoryById,
   getCategoryIdByName,
   getProductsInCategory,

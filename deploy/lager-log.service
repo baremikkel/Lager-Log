@@ -1,0 +1,23 @@
+# systemd service for Lager-Log on the Raspberry Pi: starts at boot and restarts if it crashes.
+# Installed by the steps in the README ("Raspberry Pi"); assumes the user "mwo" and /home/mwo/lager-log.
+#
+#   sudo cp deploy/lager-log.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now lager-log
+#   journalctl -u lager-log -f        (follow the log)
+
+[Unit]
+Description=Lager-Log
+After=network-online.target postgresql.service
+Wants=network-online.target postgresql.service
+
+[Service]
+Type=simple
+User=mwo
+WorkingDirectory=/home/mwo/lager-log
+ExecStart=/usr/local/bin/node dist/server.js
+Environment=NODE_ENV=production
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

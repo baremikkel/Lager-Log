@@ -1,14 +1,19 @@
 // Generates a self-signed certificate for local-network HTTPS (needed for camera access on other devices).
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
-import { networkInterfaces } from 'node:os';
+import { hostname, networkInterfaces } from 'node:os';
 
 const lanIps = Object.values(networkInterfaces())
   .flat()
   .filter((net) => net && net.family === 'IPv4' && !net.internal)
   .map((net) => net.address);
 
-const altNames = ['DNS:localhost', 'IP:127.0.0.1', ...lanIps.map((ip) => `IP:${ip}`)].join(',');
+// Also cover the computer's name (e.g. lager-log.local on the Raspberry Pi), so the
+// certificate keeps working if the IP address changes.
+const name = hostname().toLowerCase();
+const dnsNames = ['localhost', name, `${name}.local`].filter((n, i, all) => n && all.indexOf(n) === i);
+
+const altNames = [...dnsNames.map((n) => `DNS:${n}`), 'IP:127.0.0.1', ...lanIps.map((ip) => `IP:${ip}`)].join(',');
 
 // On Windows, OpenSSL is usually not on PATH but ships with Git for Windows.
 function findOpenssl() {

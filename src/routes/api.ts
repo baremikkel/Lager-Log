@@ -7,7 +7,8 @@ import {
   addCategory,
   updateCategory,
   updateProduct,
-  saveNavSettings
+  saveNavSettings,
+  saveAppSettings
 } from "../services/database/databaseClient";
 
 const api_router = Router();
@@ -147,6 +148,21 @@ api_router.post("/settings/nav", async (req: Request, res: Response) => {
     res.status(200).json({ message: "Settings saved" });
   } catch (error) {
     logger.error(`[Backend] Error saving navigation settings: ${error}`);
+    return res.status(500).json({ error: "Failed to save settings" });
+  }
+});
+
+// Settings page: display settings, e.g. { showBarcodeOnCards: false }.
+api_router.post("/settings/display", async (req: Request, res: Response) => {
+  const { showBarcodeOnCards } = req.body ?? {};
+  if (typeof showBarcodeOnCards !== "boolean") {
+    return res.status(400).json({ error: "showBarcodeOnCards must be true or false" });
+  }
+  try {
+    await saveAppSettings({ showBarcodeOnCards });
+    res.status(200).json({ message: "Settings saved" });
+  } catch (error) {
+    logger.error(`[Backend] Error saving display settings: ${error}`);
     return res.status(500).json({ error: "Failed to save settings" });
   }
 });

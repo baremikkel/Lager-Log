@@ -12,6 +12,7 @@ Lager-Log is a web app for keeping track of products and stock. You scan barcode
 - [Manual setup](#manual-setup)
 - [Using the camera on a phone or tablet (HTTPS)](#using-the-camera-on-a-phone-or-tablet-https)
 - [Production build](#production-build)
+- [Raspberry Pi](#raspberry-pi)
 - [npm commands](#npm-commands)
 - [Pages](#pages)
 - [Project structure](#project-structure)
@@ -111,6 +112,7 @@ Both the app and `docker-compose.yml` read `.env`, so the database is created wi
 | `SSL_KEY_FILE` | no | app | Path to the HTTPS private key, e.g. `certs/key.pem` |
 | `SSL_CERT_FILE` | no | app | Path to the HTTPS certificate, e.g. `certs/cert.pem` |
 | `HTTPS_PORT` | no | app | HTTPS port, default `3443` |
+| `HTTPS_REDIRECT` | no | app | `true` sends `http://` visitors to the `https://` address (except `localhost`), so the camera works whichever address is typed. Used on the Raspberry Pi |
 
 Example:
 
@@ -226,6 +228,78 @@ npm run start:prod
 
 This runs the same checks and database setup as `npm start`, then builds minified assets and the server bundle (`npm run build:prod`) and runs `node dist/server.js`, with no watchers or auto-restart.
 
+## Raspberry Pi
+
+The app runs fine on a Raspberry Pi, even a Pi Zero W: the barcode scanning happens on the phone, so the Pi only serves pages and talks to the database. On a small Pi:
+
+- PostgreSQL is installed directly (`sudo apt install postgresql`). Docker and pgAdmin are too heavy and mostly not available for ARMv6.
+- The project is **built on your PC** with `npm run build:pi`, because esbuild and Tailwind have no ARMv6 version. Only the finished files are copied to the Pi.
+- Node.js 18 or newer is needed. Official Node builds no longer exist for ARMv6 (Pi Zero / Pi 1); use the `armv6l` builds from [unofficial-builds.nodejs.org](https://unofficial-builds.nodejs.org/download/release/).
+- A systemd service (`deploy/lager-log.service`) starts the app at boot and restarts it if it crashes.
+
+### First installation
+
+On your PC:
+
+```sh
+npm run build:pi
+scp release/lager-log.tar.gz lager-log:~
+```
+
+On the Pi (`ssh lager-log`), the first time:
+
+```sh
+sudo apt install postgresql
+sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'choose-a-password';"
+sudo -u postgres psql -c "CREATE DATABASE storage_database OWNER admin;"
+
+tar -xzf lager-log.tar.gz && cd lager-log
+cp .env.example .env          # fill in DB_* with the values above
+npm ci --omit=dev             # only the packages needed to run (takes a few minutes on a Pi Zero)
+npm run db:seed              # tables, categories and loose fruit/vegetables
+npm run cert                 # HTTPS certificate for lager-log.local and the Pi's IP addresses
+```
+
+Add to `.env`:
+
+```dotenv
+SSL_KEY_FILE=certs/key.pem
+SSL_CERT_FILE=certs/cert.pem
+HTTPS_PORT=3443
+HTTPS_REDIRECT=true
+```
+
+Then start it as a service:
+
+```sh
+sudo cp deploy/lager-log.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now lager-log
+```
+
+Open `http://lager-log.local:3000` (or the Pi's IP address) on a phone. It is sent on to `https://…:3443`; accept the certificate warning once.
+
+Give the Pi a fixed IP address in your router (DHCP reservation) so the address does not change.
+
+### Updating
+
+```sh
+npm run build:pi
+scp release/lager-log.tar.gz lager-log:~
+ssh lager-log "tar -xzf lager-log.tar.gz && cd lager-log && npm ci --omit=dev && npm run db:setup && sudo systemctl restart lager-log"
+```
+
+Unpacking over the old folder keeps `.env` and `certs/`, which are not part of the package.
+
+### Useful commands on the Pi
+
+| Command | Description |
+| --- | --- |
+| `systemctl status lager-log` | Is the app running? |
+| `journalctl -u lager-log -f` | Follow the app's log |
+| `sudo systemctl restart lager-log` | Restart the app |
+| `pg_dump -h localhost -U admin storage_database > backup.sql` | Back up the database |
+
 ## npm commands
 
 All commands work on both Linux and Windows.
@@ -240,6 +314,9 @@ All commands work on both Linux and Windows.
 | `npm run build:css` | Compile the Tailwind CSS |
 | `npm run build:frontend` | Bundle the browser-side TypeScript |
 | `npm run build:prod` | Build CSS, frontend assets and the server bundle |
+| `npm run build:pi` | Build a ready-to-run package for the Raspberry Pi in `release/` |
+| `npm run db:setup` | Create/update the tables in the database from `.env`, without Docker |
+| `npm run db:seed` | Same, plus 86 loose fruits and vegetables without barcodes (safe to run again) |
 
 Useful Docker commands (same on both systems):
 

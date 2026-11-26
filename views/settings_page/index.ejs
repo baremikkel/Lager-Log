@@ -6,7 +6,18 @@
 
     <div class="bg-white p-3 sm:p-4 md:p-6 rounded-2xl shadow-sm w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
       <h1 class="text-lg sm:text-xl md:text-2xl font-bold mb-1">Indstillinger</h1>
-      <h2 class="text-base sm:text-lg font-semibold mt-4">Kategorier i navigationsbaren</h2>
+
+      <h2 class="text-base sm:text-lg font-semibold mt-4">Produktkort</h2>
+      <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-2 border border-slate-200 rounded-lg px-3 py-2">
+        <label class="flex items-center gap-3 flex-1 cursor-pointer select-none py-1">
+          <input type="checkbox" id="showBarcodeOnCards" class="w-5 h-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+            <%= !locals.appSettings || locals.appSettings.showBarcodeOnCards ? 'checked' : '' %>>
+          <span class="text-base">Vis stregkode på produktkort</span>
+        </label>
+        <p id="displaySettingsStatus" class="text-sm" role="status"></p>
+      </div>
+
+      <h2 class="text-base sm:text-lg font-semibold mt-6">Kategorier i navigationsbaren</h2>
       <p class="text-sm text-slate-600 mb-3">
         Sæt flueben ved de kategorier, der skal have deres egen side i menuen øverst. Brug pilene til at bestemme rækkefølgen.
       </p>

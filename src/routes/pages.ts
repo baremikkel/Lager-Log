@@ -13,9 +13,11 @@ page_router.get('/scanner', async (req: Request, res: Response)=> {
     res.render('scanner_page', {title: 'Scanner', products: products})
 })
 
+// "Dit Lager" only shows what is actually in stock; "Alle Produkter" shows everything.
 page_router.get('/inventory', async (req: Request, res: Response) => {
-    const inventory = await getAllProductsWithCategories();
-    res.render('inventory_page', {title: 'Lager', items: inventory});
+    const products = await getAllProductsWithCategories();
+    const inStock = products.filter((product: any) => Number(product.product_amount) > 0);
+    res.render('inventory_page', {title: 'Lager', items: inStock});
 });
 
 page_router.get('/categories', async (req: Request, res: Response) => {

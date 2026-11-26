@@ -24,7 +24,10 @@
     "build:frontend": "node scripts/build-frontend.mjs --minify",
     "watch:frontend": "node scripts/build-frontend.mjs --watch",
     "copy:assets": "copyfiles -u 2 src/views/images/**/* dist/public && copyfiles -u 1 src/views/layouts dist/public",
-    "dev": "npm run copy:assets && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\""
+    "dev": "npm run copy:assets && concurrently \"npm run watch:css\" \"npm run watch:server\" \"npm run watch:frontend\" \"npm run dev:run\"",
+    "db:setup": "node scripts/db-setup.mjs",
+    "db:seed": "node scripts/db-setup.mjs --seed",
+    "build:pi": "node scripts/build-pi.mjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
