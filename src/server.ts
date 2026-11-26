@@ -14,6 +14,14 @@ const PORT = 3000;
 const HTTPS_PORT = Number(process.env.HTTPS_PORT) || 3443;
 const { SSL_KEY_FILE, SSL_CERT_FILE } = process.env;
 const httpsEnabled = Boolean(SSL_KEY_FILE && SSL_CERT_FILE);
+// STANDARD_PORTS=true also listens on the standard ports 80 (http) and 443 (https), so the
+// address works without a port number, e.g. https://lager-log. Ports below 1024 need the
+// CAP_NET_BIND_SERVICE permission, which deploy/lager-log.service gives the app on the Pi.
+const standardPorts = process.env.STANDARD_PORTS === 'true';
+const httpPorts = standardPorts ? [PORT, 80] : [PORT];
+const httpsPorts = standardPorts ? [HTTPS_PORT, 443] : [HTTPS_PORT];
+// Where http visitors are sent: no port number needed when 443 is in use.
+const httpsPortSuffix = standardPorts ? '' : `:${HTTPS_PORT}`;
 
 // HTTPS_REDIRECT=true sends plain http visitors to the https address, so the camera
 // (which browsers only allow over https) works whichever address people type.
@@ -21,8 +29,16 @@ const httpsEnabled = Boolean(SSL_KEY_FILE && SSL_CERT_FILE);
 if (httpsEnabled && process.env.HTTPS_REDIRECT === 'true') {
     app.use((req, res, next) => {
         if (req.secure || req.hostname === 'localhost' || req.hostname === '127.0.0.1') return next();
-        res.redirect(`https://${req.hostname}:${HTTPS_PORT}${req.originalUrl}`);
+        res.redirect(`https://${req.hostname}${httpsPortSuffix}${req.originalUrl}`);
     });
+}
+
+/** Starts a server on `port`; a port that can't be used is logged instead of crashing the app. */
+function listen(server: net.Server, port: number, url: string): void {
+    server.on('error', (error: NodeJS.ErrnoException) => {
+        console.error(`Could not listen on port ${port}: ${error.code ?? error.message}`);
+    });
+    server.listen(port, () => console.log(`Listening at ${url}`));
 }
 
 app.set('view engine', 'ejs');
@@ -45,9 +61,9 @@ app.use(async (req, res, next) => {
     next();
 });
 app.use('/', page_router);
-app.listen(PORT, () => {
-    console.log(`Server active at http://localhost:${PORT}`);
-});
+for (const port of httpPorts) {
+    listen(http.createServer(app), port, `http://localhost:${port}`);
+}
 
 // Optional HTTPS: browsers only allow camera access over HTTPS (or on localhost).
 if (httpsEnabled) {
@@ -62,21 +78,22 @@ if (httpsEnabled) {
     // byte of each connection: a TLS handshake (0x16) goes to the HTTPS server, anything else
     // gets sent on to the same address with https://.
     const toHttps = http.createServer((req, res) => {
-        const host = req.headers.host ?? `localhost:${HTTPS_PORT}`;
+        const host = req.headers.host ?? `localhost${httpsPortSuffix}`;
         res.writeHead(302, { Location: `https://${host}${req.url ?? '/'}` });
         res.end();
     });
 
-    net.createServer((socket) => {
-        socket.once('data', (firstChunk) => {
-            socket.pause();
-            socket.unshift(firstChunk);
-            const target = firstChunk[0] === 0x16 ? httpsServer : toHttps;
-            target.emit('connection', socket);
-            process.nextTick(() => socket.resume());
+    for (const port of httpsPorts) {
+        const sniffer = net.createServer((socket) => {
+            socket.once('data', (firstChunk) => {
+                socket.pause();
+                socket.unshift(firstChunk);
+                const target = firstChunk[0] === 0x16 ? httpsServer : toHttps;
+                target.emit('connection', socket);
+                process.nextTick(() => socket.resume());
+            });
+            socket.on('error', () => socket.destroy());
         });
-        socket.on('error', () => socket.destroy());
-    }).listen(HTTPS_PORT, () => {
-        console.log(`HTTPS server active at https://localhost:${HTTPS_PORT}`);
-    });
+        listen(sniffer, port, `https://localhost:${port}`);
+    }
 }

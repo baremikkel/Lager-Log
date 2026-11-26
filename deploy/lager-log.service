@@ -16,6 +16,9 @@ User=mwo
 WorkingDirectory=/home/mwo/lager-log
 ExecStart=/usr/local/bin/node dist/server.js
 Environment=NODE_ENV=production
+# Lets the app (still running as "mwo", not root) use ports 80 and 443 when
+# STANDARD_PORTS=true is set in .env, so the address works without a port number.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
 Restart=always
 RestartSec=5
 

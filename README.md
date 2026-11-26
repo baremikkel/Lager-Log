@@ -113,6 +113,7 @@ Both the app and `docker-compose.yml` read `.env`, so the database is created wi
 | `SSL_CERT_FILE` | no | app | Path to the HTTPS certificate, e.g. `certs/cert.pem` |
 | `HTTPS_PORT` | no | app | HTTPS port, default `3443` |
 | `HTTPS_REDIRECT` | no | app | `true` sends `http://` visitors to the `https://` address (except `localhost`), so the camera works whichever address is typed. Used on the Raspberry Pi |
+| `STANDARD_PORTS` | no | app | `true` also listens on ports 80 and 443, so the address works without a port number (e.g. `https://lager-log`). Needs permission to use ports below 1024; `deploy/lager-log.service` gives it on the Raspberry Pi |
 
 Example:
 
@@ -267,6 +268,7 @@ SSL_KEY_FILE=certs/key.pem
 SSL_CERT_FILE=certs/cert.pem
 HTTPS_PORT=3443
 HTTPS_REDIRECT=true
+STANDARD_PORTS=true
 ```
 
 Then start it as a service:
@@ -277,7 +279,9 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now lager-log
 ```
 
-Open `http://lager-log.local:3000` (or the Pi's IP address) on a phone. It is sent on to `https://…:3443`; accept the certificate warning once.
+Open `lager-log.local` or `lager-log` (or the Pi's IP address) on a phone; no port number is needed with `STANDARD_PORTS=true`. It is sent on to `https://`; accept the certificate warning once. The old addresses with `:3000` and `:3443` keep working.
+
+If Chrome searches for `lager-log` instead of opening it, type `lager-log/` or `http://lager-log` the first time; after that the browser remembers it.
 
 Give the Pi a fixed IP address in your router (DHCP reservation) so the address does not change.
 
